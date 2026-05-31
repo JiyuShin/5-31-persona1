@@ -5757,7 +5757,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
           '<span class="test1-assist-pill-shell" aria-hidden="true"></span>' +
           '<div class="test1-assist-pill-body">' +
             '<svg class="test1-assist-pill-svg" viewBox="0 0 98 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-              '<rect class="test1-assist-pill-bg" width="97.5364" height="27.6699" rx="13.835" fill="#17171A" fill-opacity="0.6"/>' +
+              '<rect class="test1-assist-pill-bg" width="97.5364" height="27.6699" rx="13.835" fill="#155E75"/>' +
               '<g class="test1-assist-pill-icon test1-assist-pill-icon--1">' +
                 '<path fill-rule="evenodd" clip-rule="evenodd" d="M10.2584 16.3014L11.426 15.4394H11.4298L11.8942 17.8988L10.2584 16.3014ZM15.3574 12.0561C15.7556 12.0561 15.8218 11.1257 15.8328 10.8201C15.835 10.7653 15.8087 10.7045 15.7643 10.6722C15.6417 10.5824 15.6548 10.4712 15.6543 10.2916C15.6543 10.2741 15.6537 10.256 15.6537 10.2369L15.663 10.0096L15.6718 9.81956C15.674 9.57094 15.5929 9.33545 15.456 9.1279V9.12681C15.2983 8.88694 15.0245 8.68377 14.7173 8.5381C14.6148 8.48991 14.5092 8.44829 14.4024 8.41324C14.2485 8.36888 14.0858 8.34424 13.9177 8.34424C12.9517 8.34424 12.1691 9.12735 12.1691 10.0934C12.1691 10.187 12.1768 10.2796 12.191 10.3699C12.2036 10.4302 12.2179 10.491 12.2359 10.5523C12.289 10.733 12.3701 10.8968 12.4588 11.0528H11.9583C11.3942 11.0682 10.8471 11.296 10.4419 11.7023L9.91451 12.2302C9.83784 12.3036 9.61933 12.526 9.37235 12.2439L9.61934 12.526C10.0728 13.0654 10.886 13.0895 11.3696 12.578L12.57 11.2396C12.6297 11.3387 12.6899 11.4373 12.7452 11.5353L12.7688 11.578C12.7912 11.6191 12.8131 11.6607 12.8328 11.7029C12.9654 11.9811 12.9845 12.4082 12.8701 12.7812C12.7507 12.751 12.628 12.7352 12.5054 12.7352C12.4156 12.7352 12.3257 12.7434 12.237 12.7604C12.1582 12.7751 12.0881 12.7943 12.0311 12.8184C11.8066 12.9005 11.6122 13.0309 11.4676 13.1881L8.93479 15.8802C8.57445 16.2285 8.63743 16.8243 9.05582 17.0993L11.1894 18.6512C11.6363 18.9251 12.1587 19.1846 12.6483 19.2799C12.9347 19.3101 13.226 19.3259 13.5223 19.3259C14.1143 19.3259 14.6888 19.2646 15.237 19.1501C15.3246 19.1211 15.4637 19.0664 15.6307 18.9787V18.9815C15.6439 18.9738 15.6586 18.9645 15.6729 18.9563C15.6866 18.9486 15.6992 18.9426 15.7134 18.9349V18.9322C15.8689 18.8391 16.0414 18.7203 16.2194 18.5647L17.9171 16.8134C18.0124 16.7165 18.0814 16.6414 18.1334 16.5746C18.2254 16.4854 18.2823 16.3616 18.2823 16.2241V15.3331C18.2823 15.3123 18.2807 15.2932 18.2791 15.2745C18.278 15.2647 18.2763 15.2548 18.2747 15.245L18.2698 15.2225C18.267 15.2121 18.2643 15.2017 18.2615 15.1913C18.1761 14.9257 17.859 14.9043 17.859 14.9043C17.8541 14.9038 17.8492 14.9038 17.8453 14.9038C17.8004 14.9038 17.7539 14.912 17.7062 14.9257C17.4735 14.9931 17.2287 15.1918 17.2199 15.1984L17.2188 15.199C17.1088 15.2888 17.0381 15.4246 17.0381 15.5768L17.1602 16.2241C17.1602 16.2723 17.1674 16.3178 17.1805 16.3616L15.7134 17.4673V17.1321L15.6548 14.964L15.6526 14.9668C15.5874 14.1639 14.674 13.4389 14.6148 13.3929L14.8744 12.0561H15.3574Z" fill="white"/>' +
               '</g>' +
@@ -5782,34 +5782,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
 
     case 'test1-transit-card': {
       return '<div class="test1-transit-card">' +
-        '<div class="test1-transit-card__bg" aria-hidden="true"></div>' +
-        '<div class="test1-transit-card__avatar">' +
-          '<img class="test1-transit-card__avatar-img" src="/test1-bus-avatar.png" alt="" draggable="false" />' +
-        '</div>' +
-        '<div class="test1-transit-card__close" aria-hidden="true">' +
-          '<span class="test1-transit-card__close-circle"></span>' +
-          '<svg class="test1-transit-card__close-icon" viewBox="249 49 17 21" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-            '<path d="M262.743 66.9492H251.258C251.258 67.0703 251.259 67.1871 251.258 67.3038C251.256 67.5357 251.265 67.7692 251.244 67.9999C251.19 68.5931 250.589 69.0495 250.005 68.9743C249.52 68.9118 249.094 68.5178 249.019 68.0215C249.007 67.939 249.001 67.8549 249.001 67.7714C249 62.7694 249 57.7675 249 52.7655C249 51.9787 249.537 51.3203 250.301 51.1665C250.38 51.151 250.461 51.146 250.541 51.146C251.349 51.1443 252.157 51.1443 252.964 51.146C253.017 51.146 253.041 51.1327 253.062 51.0813C253.122 50.9291 253.236 50.8207 253.368 50.7321C253.656 50.5407 253.976 50.4228 254.304 50.3277C254.82 50.1777 255.347 50.093 255.88 50.0388C256.442 49.9824 257.005 49.9674 257.569 49.9979C258.38 50.041 259.18 50.1478 259.953 50.4123C260.195 50.4953 260.431 50.5944 260.643 50.7432C260.775 50.8361 260.887 50.949 260.943 51.1062C260.959 51.1515 260.99 51.1449 261.022 51.1449C261.536 51.1449 262.05 51.1449 262.564 51.1449C262.846 51.1449 263.127 51.1438 263.409 51.1449C264.289 51.1471 264.995 51.8537 264.998 52.7445C265.002 54.0664 264.999 55.3877 264.999 56.7096C264.999 60.4062 265 64.1035 265 67.8002C265 68.3778 264.639 68.8393 264.096 68.9571C263.458 69.096 262.806 68.6196 262.756 67.9623C262.732 67.6552 262.746 67.3453 262.743 67.0366C262.743 67.0106 262.743 66.984 262.743 66.9486V66.9492ZM251.261 58.6412H262.737V53.8113H251.261V58.6412ZM251.258 62.5819C251.256 63.0898 251.651 63.4993 252.144 63.502C252.659 63.5048 253.062 63.1059 253.065 62.5924C253.067 62.0712 252.675 61.6667 252.164 61.665C251.661 61.6634 251.259 62.0695 251.258 62.5819ZM262.743 62.5891C262.743 62.0761 262.349 61.6661 261.855 61.665C261.338 61.6639 260.937 62.0656 260.937 62.5824C260.938 63.0948 261.337 63.5004 261.841 63.4998C262.343 63.4998 262.743 63.0953 262.743 62.5885V62.5891Z" fill="#FFFFFF"/>' +
-          '</svg>' +
-        '</div>' +
-        '<div class="test1-transit-card__copy">' +
-          '<div class="test1-transit-card__title">이번 정류장에서 하차</div>' +
-          '<div class="test1-transit-card__subtitle">진천청구 타운 앞</div>' +
-        '</div>' +
-        '<div class="test1-transit-card__end">안내 종료</div>' +
-        '<div class="test1-transit-card__progress">' +
-          '<div class="test1-transit-card__track"></div>' +
-          '<div class="test1-transit-card__fill"></div>' +
-          '<div class="test1-transit-card__thumb">' +
-            '<svg class="test1-transit-card__send" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-              '<g clip-path="url(#clip0_test1_transit_send)">' +
-                '<path fill-rule="evenodd" clip-rule="evenodd" d="M11.2481 13.1411C11.366 13.3603 11.3743 13.621 11.2707 13.8472L9.44457 17.8188C9.11377 18.5614 9.34802 18.9516 9.51752 19.1204C9.83042 19.4302 10.3843 19.4472 10.9999 19.1671L21.7171 14.3855C22.2884 14.1224 22.6121 13.6338 22.5955 13.1319C22.5795 12.6306 22.2258 12.1642 21.6383 11.9376L10.6388 7.8488C10.0061 7.60914 9.45437 7.66149 9.16192 7.99176C9.00463 8.16985 8.7941 8.5748 9.17275 9.29472L11.2481 13.1411ZM16.4516 13.3288L11.4362 13.4891Z" fill="white"/>' +
-                '<path d="M16.4516 13.3288L11.4362 13.4891M11.2481 13.1411C11.366 13.3603 11.3743 13.621 11.2707 13.8472L9.44457 17.8188C9.11377 18.5614 9.34802 18.9516 9.51752 19.1204C9.83042 19.4302 10.3843 19.4472 10.9999 19.1671L21.7171 14.3855C22.2884 14.1224 22.6121 13.6338 22.5955 13.1319C22.5795 12.6306 22.2258 12.1642 21.6383 11.9376L10.6388 7.8488C10.0061 7.60914 9.45437 7.66149 9.16192 7.99176C9.00463 8.16985 8.7941 8.5748 9.17275 9.29472L11.2481 13.1411Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-              '</g>' +
-              '<defs><clipPath id="clip0_test1_transit_send"><rect width="19" height="19" fill="white" transform="translate(13) rotate(43.1698)"/></clipPath></defs>' +
-            '</svg>' +
-          '</div>' +
-        '</div>' +
+        '<img class="test1-transit-card__svg" src="/test1-transit-card.svg" alt="" draggable="false" aria-hidden="true" />' +
       '</div>';
     }
 
@@ -5860,16 +5833,15 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
             '<div class="test1-bottom-pill__grad-sweep-track test1-bottom-pill__grad-sweep-track--3"></div>' +
           '</div>' +
         '</div>' +
+        '<div class="test1-bottom-pill__ai-logo-host">' +
+          '<canvas class="test1-bottom-pill__ai-logo"></canvas>' +
+        '</div>' +
         '<svg class="test1-bottom-pill__svg" viewBox="0 0 200 53" fill="none" xmlns="http://www.w3.org/2000/svg">' +
           '<defs>' +
             '<style>' +
               '@font-face{font-family:\'Pretendard SB\';src:url(\'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2\') format(\'woff2\');font-weight:600;font-style:normal;}' +
               '.test1-bottom-pill__text--b,.test1-bottom-pill__text--b tspan{font-family:\'Pretendard SB\',sans-serif;font-weight:600;font-synthesis:none;}' +
             '</style>' +
-            '<linearGradient id="test1bp_paint1" x1="14.5547" y1="7" x2="34.0547" y2="46" gradientUnits="userSpaceOnUse">' +
-              '<stop stop-color="#EECBFF"/>' +
-              '<stop offset="1" stop-color="white"/>' +
-            '</linearGradient>' +
             '<linearGradient id="test1bp_text_a_highlight" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="1" y2="0">' +
               '<stop offset="0%" stop-color="white" stop-opacity="0"/>' +
               '<stop offset="10%" stop-color="white" stop-opacity="0"/>' +
@@ -5885,10 +5857,12 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
               '<path d="' + test1bpTextAPathD + '" fill="white"/>' +
             '</mask>' +
           '</defs>' +
-          '<circle class="test1-bottom-pill__icon" cx="26.2791" cy="26.2791" r="19.2713" fill="url(#test1bp_paint1)"/>' +
+          '<g class="test1-bottom-pill__icon-wrap">' +
+            '<circle class="test1-bottom-pill__icon" cx="26.2791" cy="26.2791" r="19.2713" fill="#155E75" stroke="#FFFFFF" stroke-width="0.93"/>' +
+          '</g>' +
           '<g class="test1-bottom-pill__text-stage">' +
               '<g class="test1-bottom-pill__text-a-stage">' +
-              '<path class="test1-bottom-pill__text test1-bottom-pill__text--a" d="' + test1bpTextAPathD + '" fill="white"/>' +
+              '<path class="test1-bottom-pill__text test1-bottom-pill__text--a" d="' + test1bpTextAPathD + '" fill="#155E75"/>' +
               '<g class="test1-bottom-pill__text-a-highlight" mask="url(#test1bp_text_a_mask)">' +
                 '<g class="test1-bottom-pill__text-a-highlight-track test1-bottom-pill__text-a-highlight-track--1">' +
                   '<rect x="-54" y="9" width="108" height="35" fill="url(#test1bp_text_a_highlight)"/>' +
@@ -5901,7 +5875,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
                 '</g>' +
               '</g>' +
             '</g>' +
-            '<text class="test1-bottom-pill__text test1-bottom-pill__text--b" fill="white" font-family="Pretendard SB, sans-serif" font-size="10.2" font-weight="600" letter-spacing="-0.02em">' +
+            '<text class="test1-bottom-pill__text test1-bottom-pill__text--b" fill="#155E75" font-family="Pretendard SB, sans-serif" font-size="10.2" font-weight="600" letter-spacing="-0.02em">' +
               '<tspan x="58" y="21.2" font-family="Pretendard SB, sans-serif" font-weight="600">저녁 식사 준비를 돕는</tspan>' +
               '<tspan x="58" y="37.2" font-family="Pretendard SB, sans-serif" font-weight="600">화면을 구성했어요.</tspan>' +
             '</text>' +
@@ -9275,7 +9249,6 @@ var TEST1_PILL_OUT_GAP_MS = 420;
 var TEST1_GRADIENT_OUT_FADE_MS = 3400;
 var TEST1_PILL_BG_DELAY_MS = 550;
 var TEST1_PILL_BG_IN_MS = 950;
-var TEST1_PILL_ICON_TEXT_DELAY_MS = TEST1_PILL_BG_DELAY_MS;
 var TEST1_PILL_TEXT_A_IN_MS = TEST1_PILL_BG_IN_MS;
 var TEST1_PILL_TEXT_HOLD_MS = 3000;
 var TEST1_PASS_DUR_MS = 1667;
@@ -9293,8 +9266,13 @@ var TEST1_PILL_PINK_FLOW_MS = TEST1_PASS_DUR_MS + TEST1_PILL_GRAD_PASS_STEP_MS *
 var TEST1_PILL_TEXT_B_DUR_MS = 1400;
 var TEST1_PILL_TEXT_B_LEAD_MS = 850;
 var TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS = 1000;
+var TEST1_PILL_ICON_AFTER_SHELL_MS = 220;
+var TEST1_PILL_PRE_PINK_AFTER_ICON_MS = 280;
+var TEST1_PILL_ICON_TEXT_DELAY_MS = TEST1_PILL_BG_DELAY_MS + TEST1_PILL_BG_IN_MS + TEST1_PILL_ICON_AFTER_SHELL_MS;
+var TEST1_PILL_AI_LOGO_START_MS = TEST1_PILL_ICON_TEXT_DELAY_MS + TEST1_PILL_BG_IN_MS;
+var TEST1_PILL_AI_LOGO_FADE_MS = 480;
 var TEST1_TOP_GRADIENT_TOTAL_MS = TEST1_GRADIENT_FLOW_MS + TEST1_GRADIENT_OUT_FADE_MS;
-var TEST1_PILL_PRE_PINK_START_MS = TEST1_PILL_ICON_TEXT_DELAY_MS + TEST1_PILL_TEXT_A_IN_MS + TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS;
+var TEST1_PILL_PRE_PINK_START_MS = TEST1_PILL_ICON_TEXT_DELAY_MS + TEST1_PILL_BG_IN_MS + TEST1_PILL_PRE_PINK_AFTER_ICON_MS;
 var TEST1_PILL_TEXT_A_REVEAL_START_MS = TEST1_PILL_PRE_PINK_START_MS + TEST1_TOP_GRADIENT_TOTAL_MS;
 var TEST1_PILL_TEXT_A_SHIMMER_START_MS = TEST1_PILL_TEXT_A_REVEAL_START_MS + TEST1_PILL_TEXT_A_IN_MS + TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS;
 var TEST1_PILL_TEXT_A_HIGHLIGHT_PASS_MS = 2850;
@@ -9385,6 +9363,66 @@ function _clearTest1IntroTimer() {
     clearTimeout(window.__mlpTest1PinkFlowStopTimer);
     window.__mlpTest1PinkFlowStopTimer = null;
   }
+  _unmountTest1BottomPillAiLogo();
+  if (window.__mlpTest1AiLogoMountTimer) {
+    clearTimeout(window.__mlpTest1AiLogoMountTimer);
+    window.__mlpTest1AiLogoMountTimer = null;
+  }
+}
+
+function _unmountTest1BottomPillAiLogo() {
+  try {
+    var pill = document.querySelector('#test1-bottom-pill');
+    if (pill && window.__test1GalaxyAiLogo && typeof window.__test1GalaxyAiLogo.unmount === 'function') {
+      window.__test1GalaxyAiLogo.unmount(pill);
+    }
+  } catch (_) {}
+}
+
+function _ensureTest1GalaxyAiLogoScript(done) {
+  if (window.__test1GalaxyAiLogo && typeof window.__test1GalaxyAiLogo.mount === 'function') {
+    done();
+    return;
+  }
+  if (window.__mlpTest1GalaxyAiLogoLoading) {
+    window.__mlpTest1GalaxyAiLogoLoading.push(done);
+    return;
+  }
+  window.__mlpTest1GalaxyAiLogoLoading = [done];
+  var script = document.createElement('script');
+  script.src = '/app/test1-galaxy-ai-logo.js?v=6';
+  script.onload = function () {
+    var queue = window.__mlpTest1GalaxyAiLogoLoading || [];
+    window.__mlpTest1GalaxyAiLogoLoading = null;
+    queue.forEach(function (fn) { try { fn(); } catch (_) {} });
+  };
+  script.onerror = function () {
+    window.__mlpTest1GalaxyAiLogoLoading = null;
+  };
+  document.head.appendChild(script);
+}
+
+function _armTest1BottomPillAiLogoMount() {
+  if (window.__mlpTest1AiLogoMountTimer) {
+    clearTimeout(window.__mlpTest1AiLogoMountTimer);
+    window.__mlpTest1AiLogoMountTimer = null;
+  }
+  window.__mlpTest1AiLogoMountTimer = setTimeout(function () {
+    window.__mlpTest1AiLogoMountTimer = null;
+    _mountTest1BottomPillAiLogo();
+  }, TEST1_PILL_AI_LOGO_START_MS);
+}
+
+function _mountTest1BottomPillAiLogo() {
+  try {
+    var pill = document.querySelector('#test1-bottom-pill');
+    if (!pill) return;
+    _ensureTest1GalaxyAiLogoScript(function () {
+      if (window.__test1GalaxyAiLogo && typeof window.__test1GalaxyAiLogo.mount === 'function') {
+        window.__test1GalaxyAiLogo.mount(pill);
+      }
+    });
+  } catch (_) {}
 }
 
 function _runTest1ShortcutsFade() {
@@ -9601,6 +9639,7 @@ function _runTest1CodaIntro() {
           if (!c2 || c2.getAttribute('data-test-scope') !== 'test1') return;
           if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
           c2.setAttribute('data-test1-coda-animate', '1');
+          _armTest1BottomPillAiLogoMount();
           _armTest1TopGradientSync(c2);
         } catch (_) {}
       });
