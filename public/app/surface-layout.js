@@ -5833,9 +5833,6 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
             '<div class="test1-bottom-pill__grad-sweep-track test1-bottom-pill__grad-sweep-track--3"></div>' +
           '</div>' +
         '</div>' +
-        '<div class="test1-bottom-pill__ai-logo-host">' +
-          '<canvas class="test1-bottom-pill__ai-logo"></canvas>' +
-        '</div>' +
         '<svg class="test1-bottom-pill__svg" viewBox="0 0 200 53" fill="none" xmlns="http://www.w3.org/2000/svg">' +
           '<defs>' +
             '<style>' +
@@ -5858,7 +5855,13 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
             '</mask>' +
           '</defs>' +
           '<g class="test1-bottom-pill__icon-wrap">' +
-            '<circle class="test1-bottom-pill__icon" cx="26.2791" cy="26.2791" r="19.2713" fill="#155E75" stroke="#FFFFFF" stroke-width="0.93"/>' +
+            '<circle class="test1-bottom-pill__icon" cx="26.2791" cy="26.2791" r="19.2713" fill="#155E75"/>' +
+            '<foreignObject x="7.0078" y="7.0078" width="38.5426" height="38.5426">' +
+              '<div xmlns="http://www.w3.org/1999/xhtml" class="test1-bottom-pill__ai-logo-slot">' +
+                '<canvas class="test1-bottom-pill__ai-logo"></canvas>' +
+              '</div>' +
+            '</foreignObject>' +
+            '<circle class="test1-bottom-pill__icon-ring" cx="26.2791" cy="26.2791" r="19.2713" fill="none" stroke="#FFFFFF" stroke-width="0.93"/>' +
           '</g>' +
           '<g class="test1-bottom-pill__text-stage">' +
               '<g class="test1-bottom-pill__text-a-stage">' +
@@ -9390,7 +9393,7 @@ function _ensureTest1GalaxyAiLogoScript(done) {
   }
   window.__mlpTest1GalaxyAiLogoLoading = [done];
   var script = document.createElement('script');
-  script.src = '/app/test1-galaxy-ai-logo.js?v=6';
+  script.src = '/app/test1-galaxy-ai-logo.js?v=8';
   script.onload = function () {
     var queue = window.__mlpTest1GalaxyAiLogoLoading || [];
     window.__mlpTest1GalaxyAiLogoLoading = null;

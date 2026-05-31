@@ -13480,7 +13480,7 @@
 
   #canvas[data-test-scope="test1"][data-test1-reveal-all] .test1-bottom-pill__bg-base,
   #canvas[data-test-scope="test1"][data-test1-reveal-all] .test1-bottom-pill__icon-wrap,
-  #canvas[data-test-scope="test1"][data-test1-reveal-all] .test1-bottom-pill__ai-logo-host {
+  #canvas[data-test-scope="test1"][data-test1-reveal-all] .test1-bottom-pill__ai-logo {
     opacity: 1;
   }
 
@@ -13959,23 +13959,26 @@
     transform-origin: center;
   }
 
-  #canvas[data-test-scope="test1"] .test1-bottom-pill__ai-logo-host {
-    position: absolute;
-    z-index: 4;
-    box-sizing: border-box;
+  #canvas[data-test-scope="test1"] .test1-bottom-pill__ai-logo-slot {
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     overflow: hidden;
     pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(1.2px, 2px);
   }
 
   #canvas[data-test-scope="test1"] .test1-bottom-pill__ai-logo {
     display: block;
-    width: 100%;
-    height: 100%;
+    width: 70%;
+    height: 70%;
     pointer-events: none;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-run] .test1-bottom-pill__ai-logo-host {
+  #canvas[data-test-scope="test1"][data-test1-coda-run] .test1-bottom-pill__ai-logo {
     opacity: 0;
   }
 
@@ -14003,7 +14006,7 @@
     animation: test1PillIconIn var(--test1-pill-icon-in-dur) var(--test1-pill-content-ease) var(--test1-pill-icon-text-delay) forwards;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__ai-logo-host {
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__ai-logo {
     opacity: 0;
     animation: test1PillAiLogoFadeIn var(--test1-pill-ai-logo-fade-dur) var(--test1-pill-content-ease) var(--test1-pill-ai-logo-start) forwards;
   }
@@ -14090,7 +14093,7 @@
 
   #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__bg-base,
   #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__icon-wrap,
-  #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__ai-logo-host {
+  #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__ai-logo {
     opacity: 1;
     animation: none;
   }
@@ -14335,7 +14338,7 @@
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__bg-base,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__bg-blue,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__icon-wrap,
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__ai-logo-host,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__ai-logo,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-sweep,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text--b,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track,

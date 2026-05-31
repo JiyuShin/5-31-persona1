@@ -4,14 +4,14 @@
   var DEG = Math.PI / 180;
   var INSTANCES = new WeakMap();
   var LOOP_FRAMES = 240;
-  var FIT_PADDING = 1.06;
+  var FIT_PADDING = 1.14;
   var PULSE_BIG = 1.12;
   var PULSE_TR = 1.15;
   var PULSE_SMALL = 1.14;
   var WOBBLE_DEG = 0.9;
-  var SIZE_SCALE = 2;
-  var SCREEN_OFFSET_X = 2;
-  var SCREEN_OFFSET_Y = 2;
+  var SIZE_SCALE = 1.45;
+  var SCREEN_OFFSET_X = 0;
+  var SCREEN_OFFSET_Y = 0;
 
   function vec(x, y) { return { x: x, y: y }; }
   function vecCopy(v) { return vec(v.x, v.y); }
@@ -366,26 +366,11 @@
     }
   };
 
-  function syncHostToPinkCircle(pillRoot, host) {
-    var pillEl = pillRoot.querySelector('.test1-bottom-pill') || pillRoot;
-    var iconCircle = pillRoot.querySelector('.test1-bottom-pill__icon');
-    if (!iconCircle || !host || !pillEl) return 0;
-    var pillRect = pillEl.getBoundingClientRect();
-    var circleRect = iconCircle.getBoundingClientRect();
-    if (!circleRect.width || !circleRect.height) return 0;
-    host.style.left = (circleRect.left - pillRect.left) + 'px';
-    host.style.top = (circleRect.top - pillRect.top) + 'px';
-    host.style.width = circleRect.width + 'px';
-    host.style.height = circleRect.height + 'px';
-    return Math.max(circleRect.width, circleRect.height);
-  }
-
   function mount(root) {
     if (!root) return null;
     var pillEl = root.querySelector('.test1-bottom-pill') || root;
-    var host = pillEl.querySelector('.test1-bottom-pill__ai-logo-host');
     var canvas = pillEl.querySelector('.test1-bottom-pill__ai-logo');
-    if (!host || !canvas) return null;
+    if (!canvas) return null;
     var existing = INSTANCES.get(canvas);
     if (existing) {
       existing.stop();
@@ -393,11 +378,9 @@
     }
 
     function setup() {
-      var size = syncHostToPinkCircle(root, host);
-      if (!size) {
-        var hostRect = host.getBoundingClientRect();
-        size = Math.max(hostRect.width, hostRect.height);
-      }
+      var slot = canvas.closest('.test1-bottom-pill__ai-logo-slot') || canvas.parentElement;
+      var slotRect = slot ? slot.getBoundingClientRect() : canvas.getBoundingClientRect();
+      var size = Math.max(slotRect.width, slotRect.height, 1);
       size = Math.max(1, Math.round(size));
       var dpr = Math.min(global.devicePixelRatio || 1, 2);
       var layout = computeViewportLayout(size);
