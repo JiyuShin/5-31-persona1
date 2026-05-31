@@ -13237,7 +13237,7 @@
     pointer-events: none !important;
   }
 
-  /* blur + black↔white boundary that spreads softly to the right (wide blend, no hard line) */
+  /* blur + white boundary that spreads softly to the right (wide blend, no hard line) */
   #canvas[data-test-scope="test1"] .test1-gradient-sweep__track {
     position: absolute;
     inset: 0;
@@ -13253,18 +13253,18 @@
     backdrop-filter: blur(3.6px);
     background: linear-gradient(
       90deg,
-      rgba(0, 0, 0, 0.38) 0%,
-      rgba(0, 0, 0, 0.34) calc(var(--test1-fill) - 34%),
-      rgba(0, 0, 0, 0.28) calc(var(--test1-fill) - 24%),
-      rgba(0, 0, 0, 0.20) calc(var(--test1-fill) - 17%),
-      rgba(0, 0, 0, 0.12) calc(var(--test1-fill) - 11%),
-      rgba(0, 0, 0, 0.06) calc(var(--test1-fill) - 6%),
+      rgba(255, 255, 255, 0.38) 0%,
+      rgba(255, 255, 255, 0.34) calc(var(--test1-fill) - 34%),
+      rgba(255, 255, 255, 0.28) calc(var(--test1-fill) - 24%),
+      rgba(255, 255, 255, 0.20) calc(var(--test1-fill) - 17%),
+      rgba(255, 255, 255, 0.12) calc(var(--test1-fill) - 11%),
+      rgba(255, 255, 255, 0.06) calc(var(--test1-fill) - 6%),
       rgba(255, 255, 255, 0.08) calc(var(--test1-fill) - 1%),
       rgba(255, 255, 255, 0.22) calc(var(--test1-fill) + 5%),
       rgba(255, 255, 255, 0.18) calc(var(--test1-fill) + 11%),
       rgba(255, 255, 255, 0.10) calc(var(--test1-fill) + 17%),
       rgba(255, 255, 255, 0.04) calc(var(--test1-fill) + 24%),
-      rgba(0, 0, 0, 0) calc(var(--test1-fill) + 34%)
+      rgba(255, 255, 255, 0) calc(var(--test1-fill) + 34%)
     );
     -webkit-mask-image: linear-gradient(
       90deg,
