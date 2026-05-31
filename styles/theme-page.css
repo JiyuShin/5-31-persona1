@@ -13635,6 +13635,10 @@
     opacity: 1;
   }
 
+  #canvas[data-test-scope="test1"][data-test1-reveal-all] .test1-bottom-pill__grad-sweep--pre {
+    opacity: 0;
+  }
+
   #canvas[data-test-scope="test1"][data-test1-reveal-all] .test1-bottom-pill__grad-sweep-track {
     opacity: 1;
     --test1-pill-grad-fill: -4%;
@@ -13910,7 +13914,10 @@
     --test1-pill-content-ease: cubic-bezier(0.33, 1, 0.68, 1);
     --test1-pill-text-hold: 3s;
     --test1-pill-text-a-shimmer-delay: 1s;
-    --test1-pill-text-a-shimmer-start: calc(var(--test1-pill-icon-text-delay) + var(--test1-pill-text-a-in-dur) + var(--test1-pill-text-a-shimmer-delay));
+    --test1-top-gradient-total: 8.121s;
+    --test1-pill-pre-pink-start: calc(var(--test1-pill-icon-text-delay) + var(--test1-pill-text-a-in-dur) + var(--test1-pill-text-a-shimmer-delay));
+    --test1-pill-text-a-reveal-start: calc(var(--test1-pill-pre-pink-start) + var(--test1-top-gradient-total));
+    --test1-pill-text-a-shimmer-start: calc(var(--test1-pill-text-a-reveal-start) + var(--test1-pill-text-a-in-dur) + var(--test1-pill-text-a-shimmer-delay));
     --test1-pill-text-a-highlight-pass-dur: 2.85s;
     --test1-pill-text-a-highlight-pass-step: 0.5s;
     --test1-pill-text-a-highlight-overlap: calc(var(--test1-pill-text-a-highlight-pass-dur) - var(--test1-pill-text-a-highlight-pass-step));
@@ -13928,6 +13935,7 @@
     --test1-pill-grad-pass-overlap: 0.62s;
     --test1-pill-grad-pass-step: calc(var(--test1-pass-dur) - var(--test1-pill-grad-pass-overlap));
     --test1-pill-pink-flow-dur: calc(var(--test1-pass-dur) + var(--test1-pill-grad-pass-step) * 2);
+    --test1-pill-pre-pink-sweep-end: calc(var(--test1-pill-pre-pink-start) + var(--test1-pill-pink-flow-dur));
     --test1-pill-pink-sweep-end: calc(var(--test1-pill-pink-sweep-start) + var(--test1-pill-pink-flow-dur));
     --test1-pill-text-b-lead: 0.85s;
     --test1-pill-cover-hold-dur: calc(var(--test1-pill-pink-flow-delay) - var(--test1-pill-bg-delay));
@@ -14098,8 +14106,9 @@
   #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-a-stage {
     opacity: 0;
     visibility: visible;
-    will-change: opacity, transform;
-    animation: test1PillTextAIn var(--test1-pill-text-a-in-dur) var(--test1-pill-content-ease) var(--test1-pill-icon-text-delay) forwards,
+    clip-path: inset(0 100% 0 0);
+    will-change: opacity, clip-path;
+    animation: test1PillTextAReveal var(--test1-pill-text-a-in-dur) var(--test1-pill-content-ease) var(--test1-pill-text-a-reveal-start) forwards,
       test1PillTextAOut var(--test1-pill-text-a-out-dur) var(--test1-pill-text-a-out-ease) var(--test1-pill-text-fadeout-delay) forwards;
   }
 
@@ -14123,24 +14132,46 @@
     display: none;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep {
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre {
+    opacity: 0;
+    pointer-events: none;
+    animation: test1PillGradSweepShow var(--test1-pill-pink-fade-dur) var(--test1-pill-pink-fade-ease) var(--test1-pill-pre-pink-start) forwards,
+      test1PillGradSweepHide 0.5s ease var(--test1-pill-pre-pink-sweep-end) forwards;
+  }
+
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track--1 {
+    opacity: 1;
+    animation: test1PillGradFillPass var(--test1-pass-dur) linear var(--test1-pill-pre-pink-start) forwards;
+  }
+
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track--2 {
+    opacity: 1;
+    animation: test1PillGradFillPass var(--test1-pass-dur) linear calc(var(--test1-pill-pre-pink-start) + var(--test1-pill-grad-pass-step)) forwards;
+  }
+
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track--3 {
+    opacity: 1;
+    animation: test1PillGradFillPass var(--test1-pass-dur) linear calc(var(--test1-pill-pre-pink-start) + var(--test1-pill-grad-pass-step) * 2) forwards;
+  }
+
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep:not(.test1-bottom-pill__grad-sweep--pre) {
     opacity: 0;
     pointer-events: none;
     animation: test1PillGradSweepShow var(--test1-pill-pink-fade-dur) var(--test1-pill-pink-fade-ease) var(--test1-pill-pink-sweep-start) forwards,
       test1PillGradSweepHide 0.5s ease var(--test1-pill-pink-sweep-end) forwards;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track--1 {
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep:not(.test1-bottom-pill__grad-sweep--pre) .test1-bottom-pill__grad-sweep-track--1 {
     opacity: 1;
     animation: test1PillGradFillPass var(--test1-pass-dur) linear var(--test1-pill-pink-sweep-start) forwards;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track--2 {
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep:not(.test1-bottom-pill__grad-sweep--pre) .test1-bottom-pill__grad-sweep-track--2 {
     opacity: 1;
     animation: test1PillGradFillPass var(--test1-pass-dur) linear calc(var(--test1-pill-pink-sweep-start) + var(--test1-pill-grad-pass-step)) forwards;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track--3 {
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep:not(.test1-bottom-pill__grad-sweep--pre) .test1-bottom-pill__grad-sweep-track--3 {
     opacity: 1;
     animation: test1PillGradFillPass var(--test1-pass-dur) linear calc(var(--test1-pill-pink-sweep-start) + var(--test1-pill-grad-pass-step) * 2) forwards;
   }
@@ -14173,7 +14204,8 @@
     mask-image: none;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep {
+  #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep,
+  #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre {
     opacity: 0;
   }
 
@@ -14266,6 +14298,17 @@
     100% {
       opacity: 1;
       transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes test1PillTextAReveal {
+    0% {
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+    }
+    100% {
+      opacity: 1;
+      clip-path: inset(0 0 0 0);
     }
   }
 
@@ -14380,7 +14423,8 @@
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__icon,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-sweep,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text--b,
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track {
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track {
       animation: none;
       opacity: 1;
       transform: none;
@@ -14395,18 +14439,23 @@
       opacity: 0;
     }
 
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep {
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre {
       opacity: 1;
     }
 
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track {
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track {
       --test1-pill-grad-fill: -4%;
       opacity: 0;
     }
 
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track--1,
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track--2,
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track--3 {
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep:not(.test1-bottom-pill__grad-sweep--pre) .test1-bottom-pill__grad-sweep-track--1,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep:not(.test1-bottom-pill__grad-sweep--pre) .test1-bottom-pill__grad-sweep-track--2,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep:not(.test1-bottom-pill__grad-sweep--pre) .test1-bottom-pill__grad-sweep-track--3,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track--1,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track--2,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track--3 {
       opacity: 1;
     }
   }

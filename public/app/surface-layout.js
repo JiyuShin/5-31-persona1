@@ -5849,6 +5849,11 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
           '<div class="test1-bottom-pill__bg-base"></div>' +
           '<div class="test1-bottom-pill__bg-blue"></div>' +
           '<div class="test1-bottom-pill__bg-blue-cover"></div>' +
+          '<div class="test1-bottom-pill__grad-sweep test1-bottom-pill__grad-sweep--pre">' +
+            '<div class="test1-bottom-pill__grad-sweep-track test1-bottom-pill__grad-sweep-track--1"></div>' +
+            '<div class="test1-bottom-pill__grad-sweep-track test1-bottom-pill__grad-sweep-track--2"></div>' +
+            '<div class="test1-bottom-pill__grad-sweep-track test1-bottom-pill__grad-sweep-track--3"></div>' +
+          '</div>' +
           '<div class="test1-bottom-pill__grad-sweep">' +
             '<div class="test1-bottom-pill__grad-sweep-track test1-bottom-pill__grad-sweep-track--1"></div>' +
             '<div class="test1-bottom-pill__grad-sweep-track test1-bottom-pill__grad-sweep-track--2"></div>' +
@@ -9287,7 +9292,10 @@ var TEST1_PILL_PINK_FLOW_MS = TEST1_PASS_DUR_MS + TEST1_PILL_GRAD_PASS_STEP_MS *
 var TEST1_PILL_TEXT_B_DUR_MS = 1400;
 var TEST1_PILL_TEXT_B_LEAD_MS = 850;
 var TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS = 1000;
-var TEST1_PILL_TEXT_A_SHIMMER_START_MS = TEST1_PILL_ICON_TEXT_DELAY_MS + TEST1_PILL_TEXT_A_IN_MS + TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS;
+var TEST1_TOP_GRADIENT_TOTAL_MS = TEST1_GRADIENT_FLOW_MS + TEST1_GRADIENT_OUT_FADE_MS;
+var TEST1_PILL_PRE_PINK_START_MS = TEST1_PILL_ICON_TEXT_DELAY_MS + TEST1_PILL_TEXT_A_IN_MS + TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS;
+var TEST1_PILL_TEXT_A_REVEAL_START_MS = TEST1_PILL_PRE_PINK_START_MS + TEST1_TOP_GRADIENT_TOTAL_MS;
+var TEST1_PILL_TEXT_A_SHIMMER_START_MS = TEST1_PILL_TEXT_A_REVEAL_START_MS + TEST1_PILL_TEXT_A_IN_MS + TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS;
 var TEST1_PILL_TEXT_A_HIGHLIGHT_PASS_MS = 2850;
 var TEST1_PILL_TEXT_A_HIGHLIGHT_STEP_MS = 500;
 var TEST1_PILL_TEXT_A_HIGHLIGHT_OVERLAP_MS = TEST1_PILL_TEXT_A_HIGHLIGHT_PASS_MS - TEST1_PILL_TEXT_A_HIGHLIGHT_STEP_MS;
@@ -9544,7 +9552,7 @@ function _armTest1TopGradientSync(canvas) {
   window.__mlpTest1GradientSyncTimer = setTimeout(function () {
     window.__mlpTest1GradientSyncTimer = null;
     _runTest1GradientSweep();
-  }, TEST1_PILL_TEXT_A_SHIMMER_START_MS);
+  }, TEST1_PILL_PRE_PINK_START_MS);
 }
 
 function _runTest1GradientSweep() {
