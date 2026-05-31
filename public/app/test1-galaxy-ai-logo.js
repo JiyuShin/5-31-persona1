@@ -4,14 +4,16 @@
   var DEG = Math.PI / 180;
   var INSTANCES = new WeakMap();
   var LOOP_FRAMES = 240;
-  var FIT_PADDING = 1.14;
+  var FIT_PADDING = 1.20;
   var PULSE_BIG = 1.12;
   var PULSE_TR = 1.15;
   var PULSE_SMALL = 1.14;
   var WOBBLE_DEG = 0.9;
-  var SIZE_SCALE = 1.45;
+  var SIZE_SCALE = 1.12;
   var SCREEN_OFFSET_X = 0;
   var SCREEN_OFFSET_Y = 0;
+  var REST_FRAME = 0;
+  var PAUSE_BLEND_FRAMES = 30;
 
   function vec(x, y) { return { x: x, y: y }; }
   function vecCopy(v) { return vec(v.x, v.y); }
@@ -26,8 +28,21 @@
     return vec(v.x / m, v.y / m);
   }
 
-  var BL_HOME = vec(-5, 5);
-  var TR_HOME = vec(65, -55);
+  var BL_HOME_RAW = vec(-5, 5);
+  var TR_HOME_RAW = vec(65, -55);
+  var STAR_SPACING = 0.84;
+  var STAR_MOTION_CX = (BL_HOME_RAW.x + TR_HOME_RAW.x) / 2;
+  var STAR_MOTION_CY = (BL_HOME_RAW.y + TR_HOME_RAW.y) / 2;
+
+  function scaleStarHome(v) {
+    return vec(
+      STAR_MOTION_CX + (v.x - STAR_MOTION_CX) * STAR_SPACING,
+      STAR_MOTION_CY + (v.y - STAR_MOTION_CY) * STAR_SPACING
+    );
+  }
+
+  var BL_HOME = scaleStarHome(BL_HOME_RAW);
+  var TR_HOME = scaleStarHome(TR_HOME_RAW);
   var TL_HOME = vec(-55, -45);
   var BR_HOME = vec(60, 40);
   var TR_TEMP_OFFSET = vecSub(BL_HOME, TR_HOME);
@@ -248,11 +263,18 @@
     this.offsetY = 0;
     this.colorBiggestHome = { r: 255, g: 255, b: 255 };
     this.colorBiggestTarget = { r: 0, g: 114, b: 245 };
-    this.reactiveStars = [
-      { id: 'TL', size: 18, pulsePhase: 45, pulseSpeed: 4.5, currentBlast: 0, col: { r: 225, g: 243, b: 255 } },
-      { id: 'BR', size: 22, pulsePhase: 90, pulseSpeed: 3.5, currentBlast: 0, col: { r: 165, g: 222, b: 255 } }
-    ];
+    this.paused = false;
+    this.pausing = false;
+    this.pauseT = 0;
+    this.pauseFromLoopFrame = 0;
   }
+
+  Test1GalaxyAiLogo.prototype.beginPauseToRest = function () {
+    if (this.paused || this.pausing) return;
+    this.pausing = true;
+    this.pauseT = 0;
+    this.pauseFromLoopFrame = this.frame % LOOP_FRAMES;
+  };
 
   Test1GalaxyAiLogo.prototype.draw = function () {
     var ctx = this.ctx;
@@ -262,30 +284,48 @@
     var cy = h / 2;
     var clipR = Math.min(w, h) / 2;
     var frameInLoop = this.frame % LOOP_FRAMES;
-    var state = computeFrameState(frameInLoop);
-    var bigPos = state.bigPos;
-    var bigAngle = state.bigAngle;
-    var tlPos = state.tlPos;
-    var brPos = state.brPos;
-    var trPos = state.trPos;
-    var trActiveScale = state.trActiveScale;
-    var tlRhythmScale = state.tlRhythmScale;
-    var colorMorphAmt = state.colorMorphAmt;
+    var state;
+    var bigPos;
+    var bigAngle;
+    var trPos;
+    var trActiveScale;
+    var colorMorphAmt;
     var pulseBig;
     var pulseTR;
-    var toSmall;
-    var angleToSmall;
-    var currentBigAngleNormalized;
-    var angleDiff;
-    var targetBlast;
-    var pushAmount;
-    var basePos;
-    var finalPos;
-    var dynamicScale;
-    var smallPulse;
     var finalTRScale;
     var currentBigColor;
-    var self = this;
+    var wobbleAngle = sinDeg(this.frame * 0.5) * WOBBLE_DEG;
+
+    if (this.paused) {
+      state = computeFrameState(REST_FRAME);
+      wobbleAngle = 0;
+      pulseBig = 1;
+      pulseTR = 1;
+    } else if (this.pausing) {
+      var pauseEase = easeInOutCubic(Math.min(1, this.pauseT));
+      var fromState = computeFrameState(this.pauseFromLoopFrame);
+      var toState = computeFrameState(REST_FRAME);
+      state = {
+        bigPos: vecLerp(fromState.bigPos, toState.bigPos, pauseEase),
+        bigAngle: lerp(fromState.bigAngle, toState.bigAngle, pauseEase),
+        trPos: vecLerp(fromState.trPos, toState.trPos, pauseEase),
+        trActiveScale: lerp(fromState.trActiveScale, toState.trActiveScale, pauseEase),
+        colorMorphAmt: lerp(fromState.colorMorphAmt, toState.colorMorphAmt, pauseEase)
+      };
+      pulseBig = lerp(1 + sinDeg(this.frame * 4) * 0.12, 1, pauseEase);
+      pulseTR = lerp(1 + sinDeg(this.frame * 5 + 135) * 0.15, 1, pauseEase);
+      wobbleAngle = lerp(wobbleAngle, 0, pauseEase);
+    } else {
+      state = computeFrameState(frameInLoop);
+      pulseBig = 1 + sinDeg(this.frame * 4) * 0.12;
+      pulseTR = 1 + sinDeg(this.frame * 5 + 135) * 0.15;
+    }
+
+    bigPos = state.bigPos;
+    bigAngle = state.bigAngle;
+    trPos = state.trPos;
+    trActiveScale = state.trActiveScale;
+    colorMorphAmt = state.colorMorphAmt;
 
     ctx.setTransform(this.dpr || 1, 0, 0, this.dpr || 1, 0, 0);
     ctx.clearRect(0, 0, w, h);
@@ -296,10 +336,7 @@
     ctx.translate(cx + SCREEN_OFFSET_X, cy + SCREEN_OFFSET_Y);
     ctx.scale(this.fitScale, this.fitScale);
     ctx.translate(this.offsetX, this.offsetY);
-    ctx.rotate(sinDeg(this.frame * 0.5) * WOBBLE_DEG * DEG);
-
-    pulseBig = 1 + sinDeg(this.frame * 4) * 0.12;
-    pulseTR = 1 + sinDeg(this.frame * 5 + 135) * 0.15;
+    ctx.rotate(wobbleAngle * DEG);
 
     ctx.save();
     ctx.translate(bigPos.x, bigPos.y);
@@ -309,33 +346,6 @@
     ctx.fillStyle = currentBigColor;
     drawDenseMorphSparkle(ctx, 75, 0);
     ctx.restore();
-
-    this.reactiveStars.forEach(function (star) {
-      ctx.save();
-      toSmall = vecSub(tlPos, bigPos);
-      if (star.id === 'BR') toSmall = vecSub(brPos, bigPos);
-      angleToSmall = Math.atan2(toSmall.y, toSmall.x) / DEG;
-      if (angleToSmall < 0) angleToSmall += 360;
-      currentBigAngleNormalized = ((bigAngle % 360) + 360) % 360;
-      angleDiff = Math.abs((angleToSmall - currentBigAngleNormalized) % 90);
-      if (angleDiff > 45) angleDiff = 90 - angleDiff;
-      targetBlast = clamp(mapRange(angleDiff, 0, 32, 1, 0), 0, 1);
-      star.currentBlast = lerp(star.currentBlast, targetBlast, 0.08);
-      dynamicScale = mapRange(star.currentBlast, 0, 1, 1, 0.3);
-      pushAmount = star.currentBlast * 28;
-      basePos = star.id === 'TL' ? tlPos : brPos;
-      finalPos = vecAdd(basePos, vecMult(vecNormalize(toSmall), pushAmount));
-      ctx.translate(finalPos.x, finalPos.y);
-      smallPulse = 1 + sinDeg(self.frame * star.pulseSpeed + star.pulsePhase) * 0.14;
-      if (star.id === 'TL') {
-        ctx.scale(smallPulse * dynamicScale * tlRhythmScale, smallPulse * dynamicScale * tlRhythmScale);
-      } else {
-        ctx.scale(smallPulse * dynamicScale, smallPulse * dynamicScale);
-      }
-      ctx.fillStyle = 'rgb(' + star.col.r + ',' + star.col.g + ',' + star.col.b + ')';
-      drawDenseMorphSparkle(ctx, star.size, 0);
-      ctx.restore();
-    });
 
     ctx.save();
     ctx.fillStyle = 'rgb(100,190,255)';
@@ -352,14 +362,48 @@
     if (this.raf) return;
     var self = this;
     function loop() {
-      self.frame += 1;
-      self.draw();
-      self.raf = global.requestAnimationFrame(loop);
+      if (self.pausing) {
+        self.pauseT = Math.min(1, self.pauseT + 1 / PAUSE_BLEND_FRAMES);
+        self.draw();
+        if (self.pauseT >= 1) {
+          self.paused = true;
+          self.pausing = false;
+          self.raf = null;
+          return;
+        }
+      } else if (!self.paused) {
+        self.frame += 1;
+        self.draw();
+      }
+      if (!self.paused) {
+        self.raf = global.requestAnimationFrame(loop);
+      }
     }
     self.raf = global.requestAnimationFrame(loop);
   };
 
+  Test1GalaxyAiLogo.prototype.relayout = function () {
+    var canvas = this.canvas;
+    var slot = canvas.closest('.test1-bottom-pill__ai-logo-slot') || canvas.parentElement;
+    var slotRect = slot ? slot.getBoundingClientRect() : canvas.getBoundingClientRect();
+    var size = Math.max(slotRect.width, slotRect.height, 1);
+    size = Math.max(1, Math.round(size));
+    var dpr = Math.min(global.devicePixelRatio || 1, 2);
+    var layout = computeViewportLayout(size);
+    canvas.width = Math.round(size * dpr);
+    canvas.height = Math.round(size * dpr);
+    this.dpr = dpr;
+    this.fitScale = layout.fitScale;
+    this.offsetX = layout.offsetX;
+    this.offsetY = layout.offsetY;
+    this.draw();
+  };
+
   Test1GalaxyAiLogo.prototype.stop = function () {
+    if (this._resizeObs) {
+      this._resizeObs.disconnect();
+      this._resizeObs = null;
+    }
     if (this.raf) {
       global.cancelAnimationFrame(this.raf);
       this.raf = null;
@@ -386,14 +430,21 @@
       var layout = computeViewportLayout(size);
       canvas.width = Math.round(size * dpr);
       canvas.height = Math.round(size * dpr);
-      canvas.style.width = '100%';
-      canvas.style.height = '100%';
+      canvas.style.removeProperty('width');
+      canvas.style.removeProperty('height');
+      canvas.style.removeProperty('transform');
       var inst = new Test1GalaxyAiLogo(canvas);
       inst.dpr = dpr;
       inst.fitScale = layout.fitScale;
       inst.offsetX = layout.offsetX;
       inst.offsetY = layout.offsetY;
       inst.start();
+      if (global.ResizeObserver && slot) {
+        inst._resizeObs = new global.ResizeObserver(function () {
+          if (!inst.paused && !inst.pausing) inst.relayout();
+        });
+        inst._resizeObs.observe(slot);
+      }
       INSTANCES.set(canvas, inst);
       return inst;
     }
@@ -422,8 +473,20 @@
     }
   }
 
+  function pause(root) {
+    if (!root) return;
+    var pillEl = root.querySelector('.test1-bottom-pill') || root;
+    var canvas = pillEl.querySelector('.test1-bottom-pill__ai-logo');
+    if (!canvas) return;
+    var inst = INSTANCES.get(canvas);
+    if (inst && typeof inst.beginPauseToRest === 'function') {
+      inst.beginPauseToRest();
+    }
+  }
+
   global.__test1GalaxyAiLogo = {
     mount: mount,
-    unmount: unmount
+    unmount: unmount,
+    pause: pause
   };
 })(typeof window !== 'undefined' ? window : this);

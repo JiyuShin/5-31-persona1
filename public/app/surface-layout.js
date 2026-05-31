@@ -9285,6 +9285,7 @@ var TEST1_PILL_TEXT_A_SHIMMER_DUR_MS = TEST1_PILL_TEXT_A_HIGHLIGHT_PASS_MS + TES
 var TEST1_PILL_PINK_FLOW_DELAY_MS = TEST1_PILL_TEXT_A_SHIMMER_START_MS + TEST1_PILL_TEXT_A_SHIMMER_DUR_MS;
 var TEST1_PILL_PINK_SWEEP_START_MS = TEST1_PILL_PINK_FLOW_DELAY_MS;
 var TEST1_PILL_TEXT_B_DELAY_MS = TEST1_PILL_PINK_FLOW_DELAY_MS + TEST1_PILL_PINK_FLOW_MS - TEST1_PILL_TEXT_B_LEAD_MS;
+var TEST1_PILL_AI_LOGO_PAUSE_MS = TEST1_PILL_TEXT_B_DELAY_MS;
 var TEST1_CODA_FADE_IN_MS = TEST1_PILL_TEXT_B_DELAY_MS + TEST1_PILL_TEXT_B_DUR_MS + 500;
 var TEST1_STACK_ITEM_GAP_PX = 16;
 var TEST1_STACK_SHIFT_PX = 72 + TEST1_STACK_ITEM_GAP_PX;
@@ -9371,6 +9372,10 @@ function _clearTest1IntroTimer() {
     clearTimeout(window.__mlpTest1AiLogoMountTimer);
     window.__mlpTest1AiLogoMountTimer = null;
   }
+  if (window.__mlpTest1AiLogoPauseTimer) {
+    clearTimeout(window.__mlpTest1AiLogoPauseTimer);
+    window.__mlpTest1AiLogoPauseTimer = null;
+  }
 }
 
 function _unmountTest1BottomPillAiLogo() {
@@ -9382,8 +9387,18 @@ function _unmountTest1BottomPillAiLogo() {
   } catch (_) {}
 }
 
+function _isMlpLocalDevHost() {
+  try {
+    var h = typeof window !== 'undefined' && window.location && window.location.hostname;
+    return h === 'localhost' || h === '127.0.0.1';
+  } catch (_) {
+    return false;
+  }
+}
+
 function _ensureTest1GalaxyAiLogoScript(done) {
-  if (window.__test1GalaxyAiLogo && typeof window.__test1GalaxyAiLogo.mount === 'function') {
+  var dev = _isMlpLocalDevHost();
+  if (!dev && window.__test1GalaxyAiLogo && typeof window.__test1GalaxyAiLogo.mount === 'function') {
     done();
     return;
   }
@@ -9391,9 +9406,19 @@ function _ensureTest1GalaxyAiLogoScript(done) {
     window.__mlpTest1GalaxyAiLogoLoading.push(done);
     return;
   }
+  if (dev) {
+    _unmountTest1BottomPillAiLogo();
+    delete window.__test1GalaxyAiLogo;
+    var oldScript = document.querySelector('script[data-mlp-test1-galaxy-ai-logo]');
+    if (oldScript) oldScript.remove();
+  } else if (window.__test1GalaxyAiLogo && typeof window.__test1GalaxyAiLogo.mount === 'function') {
+    done();
+    return;
+  }
   window.__mlpTest1GalaxyAiLogoLoading = [done];
   var script = document.createElement('script');
-  script.src = '/app/test1-galaxy-ai-logo.js?v=8';
+  script.src = '/app/test1-galaxy-ai-logo.js' + (dev ? ('?t=' + Date.now()) : '?v=15');
+  script.setAttribute('data-mlp-test1-galaxy-ai-logo', '1');
   script.onload = function () {
     var queue = window.__mlpTest1GalaxyAiLogoLoading || [];
     window.__mlpTest1GalaxyAiLogoLoading = null;
@@ -9410,10 +9435,30 @@ function _armTest1BottomPillAiLogoMount() {
     clearTimeout(window.__mlpTest1AiLogoMountTimer);
     window.__mlpTest1AiLogoMountTimer = null;
   }
+  if (window.__mlpTest1AiLogoPauseTimer) {
+    clearTimeout(window.__mlpTest1AiLogoPauseTimer);
+    window.__mlpTest1AiLogoPauseTimer = null;
+  }
   window.__mlpTest1AiLogoMountTimer = setTimeout(function () {
     window.__mlpTest1AiLogoMountTimer = null;
     _mountTest1BottomPillAiLogo();
   }, TEST1_PILL_AI_LOGO_START_MS);
+  window.__mlpTest1AiLogoPauseTimer = setTimeout(function () {
+    window.__mlpTest1AiLogoPauseTimer = null;
+    _pauseTest1BottomPillAiLogo();
+  }, TEST1_PILL_AI_LOGO_PAUSE_MS);
+}
+
+function _pauseTest1BottomPillAiLogo() {
+  try {
+    var pill = document.querySelector('#test1-bottom-pill');
+    if (!pill) return;
+    _ensureTest1GalaxyAiLogoScript(function () {
+      if (window.__test1GalaxyAiLogo && typeof window.__test1GalaxyAiLogo.pause === 'function') {
+        window.__test1GalaxyAiLogo.pause(pill);
+      }
+    });
+  } catch (_) {}
 }
 
 function _mountTest1BottomPillAiLogo() {
