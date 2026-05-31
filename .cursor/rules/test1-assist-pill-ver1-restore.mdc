@@ -1,0 +1,25 @@
+---
+description: Restore test1 assist-pill (작은 pillar UI) intro motion VER1 from snapshot when user asks
+globs: public/app/surface-layout.js,styles/theme-page.css,public/app/snapshots/**
+alwaysApply: false
+---
+
+# test1 assist-pill motion VER1 restore
+
+When the user asks to **restore / re-apply ver1** for the small pillar UI (`test1-assist-pill`, 롯데마트 아래 작은 pillar):
+
+1. Read `public/app/snapshots/test1-assist-pill-motion-ver1.meta.js` for timing + restore map.
+2. Read `public/app/snapshots/test1-assist-pill-motion-ver1.snapshot.css` — split at section comments:
+   - **intro block** → replace CSS between `test1-assist-pill-motion-ver1:start` and `:intro-end` in `styles/theme-page.css`
+   - **lifecycle block** → replace CSS between `:lifecycle-start` and `:end`
+3. Replace `case 'test1-assist-pill'` body in `public/app/surface-layout.js` from `test1-assist-pill-motion-ver1.render.js.snippet`.
+4. Restore JS timing if changed: `TEST1_PILL_AFTER_LOTTE_MS=1300`, `TEST1_PILL_ANIM_MS=3800`, `_runTest1PillIntro`, `_armTest1PillDelay`.
+5. test1 scope only — do not touch test2/test3, bottom-pill coda, or `/theme`.
+
+## VER1 motion (reference)
+
+- Appears 1.3s after Lotte bar intro starts (`pill-prep` → double rAF → `pill-run`).
+- 36px circle → slide left → expand to full 127px width; shell grey → dark; 4 icons stagger in over 3.8s.
+- Later: stack +88px, pill-out blur fade 0.8s.
+
+Do **not** overwrite snapshot files when implementing a new motion version — update live CSS/JS only; keep snapshots as ver1 archive.
