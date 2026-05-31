@@ -393,9 +393,9 @@ window.composeSurfacePlan = function composeSurfacePlan(surfaceType, layout) {
             { id: 'test1-gradient-sweep-c', role: 'test1-gradient-sweep', zone: 'viewing',
               _rect: { x: test1TransitX, y: test1TransitY, w: test1TransitVisW, h: test1TransitVisH }, variant: { sweepShape: 'card' } },
             { id: 'test1-l-shortcut', role: 'test1-lock-shortcut-l', zone: 'bottomNav',
-              _rect: { x: 28, y: 797, w: 60, h: 59 } },
+              _rect: { x: 16.5, y: 795, w: 64, h: 57 } },
             { id: 'test1-r-shortcut', role: 'test1-lock-shortcut-r', zone: 'bottomNav',
-              _rect: { x: 300, y: 797, w: 60, h: 59 } },
+              _rect: { x: 307.5, y: 795, w: 64, h: 57 } },
             { id: 'test1-bottom-pill', role: 'test1-bottom-pill', zone: 'bottomNav',
               _rect: { x: 96.5, y: 797, w: 215, h: 57 } }
           ]
@@ -9371,15 +9371,7 @@ function _clearTest1IntroTimer() {
 }
 
 function _runTest1ShortcutsFade() {
-  try {
-    var c = document.getElementById('canvas');
-    if (!c || c.getAttribute('data-test-scope') !== 'test1') return;
-    if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
-    if (c.getAttribute('data-test1-shortcuts-out')) return;
-    c.setAttribute('data-test1-shortcuts-out', '1');
-    c.setAttribute('data-test1-shortcuts-animate', '1');
-    if (window.__mlpTestConfig) window.__mlpTestConfig.test1ShortcutsOut = true;
-  } catch (_) {}
+  /* shortcuts stay visible for full test1 flow — no mid-sequence fade-out */
 }
 
 function _runTest1PillIntro() {
@@ -9556,11 +9548,8 @@ function _runTest1CodaIntro() {
     if (!c || c.getAttribute('data-test-scope') !== 'test1') return;
     if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
     if (c.getAttribute('data-test1-coda-run')) return;
-    c.removeAttribute('data-test1-shortcuts-out');
-    c.removeAttribute('data-test1-shortcuts-animate');
     c.setAttribute('data-test1-coda-run', '1');
     if (window.__mlpTestConfig) {
-      window.__mlpTestConfig.test1ShortcutsOut = false;
       window.__mlpTestConfig.test1CodaRun = true;
     }
     requestAnimationFrame(function () {

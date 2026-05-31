@@ -12851,46 +12851,6 @@
     }
   }
 
-  /* test1 intro — green 직전 전화/카메라 shortcut fade out */
-  #canvas[data-test-scope="test1"][data-test1-shortcuts-animate][data-test1-shortcuts-out]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-lock-shortcut-l"],
-  #canvas[data-test-scope="test1"][data-test1-shortcuts-animate][data-test1-shortcuts-out]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-lock-shortcut-r"],
-  #canvas[data-test-scope="test1"][data-test1-shortcuts-animate][data-test1-shortcuts-out]:not([data-test1-reveal-all]) #test1-l-shortcut,
-  #canvas[data-test-scope="test1"][data-test1-shortcuts-animate][data-test1-shortcuts-out]:not([data-test1-reveal-all]) #test1-r-shortcut {
-    animation: test1ShortcutsFadeOut 0.48s cubic-bezier(0.33, 1, 0.68, 1) both;
-    pointer-events: none !important;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-shortcuts-out]:not([data-test1-reveal-all]):not([data-test1-shortcuts-animate]) .canvas-item[data-role="test1-lock-shortcut-l"],
-  #canvas[data-test-scope="test1"][data-test1-shortcuts-out]:not([data-test1-reveal-all]):not([data-test1-shortcuts-animate]) .canvas-item[data-role="test1-lock-shortcut-r"],
-  #canvas[data-test-scope="test1"][data-test1-shortcuts-out]:not([data-test1-reveal-all]):not([data-test1-shortcuts-animate]) #test1-l-shortcut,
-  #canvas[data-test-scope="test1"][data-test1-shortcuts-out]:not([data-test1-reveal-all]):not([data-test1-shortcuts-animate]) #test1-r-shortcut {
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-
-  @keyframes test1ShortcutsFadeOut {
-    0% {
-      opacity: 1;
-      visibility: visible;
-    }
-    100% {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    #canvas[data-test-scope="test1"][data-test1-shortcuts-animate][data-test1-shortcuts-out]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-lock-shortcut-l"],
-    #canvas[data-test-scope="test1"][data-test1-shortcuts-animate][data-test1-shortcuts-out]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-lock-shortcut-r"],
-    #canvas[data-test-scope="test1"][data-test1-shortcuts-animate][data-test1-shortcuts-out]:not([data-test1-reveal-all]) #test1-l-shortcut,
-    #canvas[data-test-scope="test1"][data-test1-shortcuts-animate][data-test1-shortcuts-out]:not([data-test1-reveal-all]) #test1-r-shortcut {
-      animation: none;
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-
   /* test1 intro — green: shortcut 바로 위에서 rise-in (shortcut 유지) */
   #canvas[data-test-scope="test1"][data-test1-green-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]) .canvas-item[data-role="test1-transit-card"],
   #canvas[data-test-scope="test1"][data-test1-green-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]) #test1-transit-card {
@@ -13572,19 +13532,22 @@
     display: block;
   }
 
-  /* test1 — left/right shortcuts share identical 59px teal circle */
+  /* test1 — left/right shortcuts share identical 57px teal circle (matches coda layout) */
   #canvas[data-test-scope="test1"] .test1-lock-shortcut-l,
   #canvas[data-test-scope="test1"] .test1-lock-shortcut-r {
     position: relative;
-    width: 60px;
-    height: 59px;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    min-height: 0;
     isolation: isolate;
   }
   #canvas[data-test-scope="test1"] .test1-lock-shortcut-l__ellipse,
   #canvas[data-test-scope="test1"] .test1-lock-shortcut-r__ellipse {
     position: absolute;
-    width: 59px;
-    height: 59px;
+    width: 57px;
+    height: 57px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -13594,8 +13557,8 @@
   #canvas[data-test-scope="test1"] .test1-lock-shortcut-l__phone,
   #canvas[data-test-scope="test1"] .test1-lock-shortcut-r__camera {
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: calc(57px * 30 / 59);
+    height: calc(57px * 30 / 59);
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -13625,6 +13588,19 @@
     object-position: center;
     display: block;
     pointer-events: none;
+  }
+
+  /* test1 — shortcuts visible for full flow (no mid-flow hide / coda re-entry) */
+  #canvas[data-test-scope="test1"]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-lock-shortcut-l"],
+  #canvas[data-test-scope="test1"]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-lock-shortcut-r"],
+  #canvas[data-test-scope="test1"]:not([data-test1-reveal-all]) #test1-l-shortcut,
+  #canvas[data-test-scope="test1"]:not([data-test1-reveal-all]) #test1-r-shortcut,
+  #canvas[data-test-scope="test1"]:not([data-test1-reveal-all]) .test1-lock-shortcut-l,
+  #canvas[data-test-scope="test1"]:not([data-test1-reveal-all]) .test1-lock-shortcut-r {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    animation: none !important;
   }
 
   /* test1 — bottom search pill hidden until coda phase */
@@ -14023,19 +13999,11 @@
     transform: none !important;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-run]:not([data-test1-coda-animate]):not([data-test1-coda-done]):not([data-test1-reveal-all]) .test1-lock-shortcut-l,
-  #canvas[data-test-scope="test1"][data-test1-coda-run]:not([data-test1-coda-animate]):not([data-test1-coda-done]):not([data-test1-reveal-all]) .test1-lock-shortcut-r {
-    opacity: 0;
-    transform: translate3d(0, 10px, 0);
-  }
-
   #canvas[data-test-scope="test1"][data-test1-coda-run]:not([data-test1-coda-animate]):not([data-test1-coda-done]):not([data-test1-reveal-all]) .test1-bottom-pill {
     opacity: 0;
     transform: translate3d(0, 8px, 0);
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-lock-shortcut-l,
-  #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-lock-shortcut-r,
   #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill {
     opacity: 1;
     transform: translate3d(0, 0, 0);
@@ -14061,15 +14029,7 @@
     height: var(--test1-coda-shortcut-icon) !important;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-lock-shortcut-l,
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-lock-shortcut-r {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    will-change: opacity, transform;
-    animation: test1CodaFadeIn var(--test1-coda-in-dur) var(--test1-coda-ease) forwards;
-  }
-
-  /* pillar — shortcuts first → blue pill + icon + text together */
+  /* pillar — blue pill + icon + text together */
   #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill {
     opacity: 0;
     transform: translate3d(0, 8px, 0);
@@ -14414,13 +14374,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-lock-shortcut-l,
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-lock-shortcut-r {
-      animation: none;
-      opacity: 1;
-      transform: none;
-    }
-
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__bg-base,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__bg-blue,
