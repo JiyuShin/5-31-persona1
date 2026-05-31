@@ -13,7 +13,12 @@
   var SCREEN_OFFSET_X = 0;
   var SCREEN_OFFSET_Y = 0;
   var REST_FRAME = 0;
-  var PAUSE_BLEND_FRAMES = 30;
+  var REST_PLATEAU_START = Math.floor(LOOP_FRAMES * 0.75);
+  var SETTLE_SCALE_MS = 720;
+  var PAUSE_SLOT_BASE_X = 1.2;
+  var PAUSE_SLOT_FINAL_X = 3;
+  var PAUSE_SLOT_FINAL_SCALE = 1.07;
+  var PAUSE_SLOT_EASING = 'cubic-bezier(0.42, 0, 0.18, 1)';
 
   function vec(x, y) { return { x: x, y: y }; }
   function vecCopy(v) { return vec(v.x, v.y); }
@@ -264,16 +269,138 @@
     this.colorBiggestHome = { r: 255, g: 255, b: 255 };
     this.colorBiggestTarget = { r: 0, g: 114, b: 245 };
     this.paused = false;
-    this.pausing = false;
-    this.pauseT = 0;
-    this.pauseFromLoopFrame = 0;
+    this.coastingToRest = false;
+    this.coastUntilFrame = 0;
+    this.settling = false;
+    this.settlePhase = '';
+    this._pauseAnim = null;
+    this._restDrawOnly = false;
   }
 
+  Test1GalaxyAiLogo.prototype._loopFrame = function () {
+    return ((this.frame % LOOP_FRAMES) + LOOP_FRAMES) % LOOP_FRAMES;
+  };
+
+  Test1GalaxyAiLogo.prototype._isRestLoopFrame = function (loopFrame) {
+    return loopFrame === REST_FRAME || loopFrame >= REST_PLATEAU_START;
+  };
+
+  Test1GalaxyAiLogo.prototype._framesUntilRest = function () {
+    var loopFrame = this._loopFrame();
+    if (this._isRestLoopFrame(loopFrame)) return 0;
+    var toPlateau = REST_PLATEAU_START - loopFrame;
+    var toZero = LOOP_FRAMES - loopFrame;
+    return toPlateau <= toZero ? toPlateau : toZero;
+  };
+
+  Test1GalaxyAiLogo.prototype._snapToRestLoopFrame = function () {
+    var loopFrame = this._loopFrame();
+    if (this._isRestLoopFrame(loopFrame)) {
+      if (loopFrame !== REST_FRAME) {
+        this.frame = this.frame - loopFrame + REST_PLATEAU_START;
+      }
+      return;
+    }
+    this.frame = this.frame - loopFrame + REST_PLATEAU_START;
+  };
+
+  Test1GalaxyAiLogo.prototype._haltLoop = function () {
+    if (this.raf) {
+      global.cancelAnimationFrame(this.raf);
+      this.raf = null;
+    }
+  };
+
+  Test1GalaxyAiLogo.prototype._clearPauseDomScale = function () {
+    var canvas = this.canvas;
+    if (!canvas) return;
+    var slot = canvas.closest('.test1-bottom-pill__ai-logo-slot');
+    if (this._pauseAnim) {
+      this._pauseAnim.cancel();
+      this._pauseAnim = null;
+    }
+    canvas.removeAttribute('data-test1-ai-logo-paused');
+    canvas.style.removeProperty('transform');
+    if (slot) {
+      slot.removeAttribute('data-test1-ai-logo-paused');
+      slot.style.removeProperty('will-change');
+      slot.style.removeProperty('transform-origin');
+      slot.style.removeProperty('transform');
+      slot.style.removeProperty('overflow');
+    }
+  };
+
+  Test1GalaxyAiLogo.prototype._runScaleWaapi = function () {
+    var self = this;
+    var canvas = this.canvas;
+    var slot = canvas && canvas.closest('.test1-bottom-pill__ai-logo-slot');
+
+    this._snapToRestLoopFrame();
+    this.frame = this.frame - this._loopFrame() + REST_FRAME;
+    this.settling = true;
+    this.settlePhase = 'waapi';
+    this._restDrawOnly = true;
+    this.draw();
+    this._restDrawOnly = false;
+
+    if (!slot || typeof slot.animate !== 'function') {
+      this._finishPause();
+      return;
+    }
+
+    if (this._pauseAnim) {
+      this._pauseAnim.cancel();
+      this._pauseAnim = null;
+    }
+
+    slot.setAttribute('data-test1-ai-logo-paused', '1');
+    canvas.setAttribute('data-test1-ai-logo-paused', '1');
+    slot.style.overflow = 'visible';
+    slot.style.transformOrigin = '20% center';
+    slot.style.willChange = 'transform';
+
+    this._pauseAnim = slot.animate([
+      {
+        transform: 'translate3d(' + PAUSE_SLOT_BASE_X + 'px, 2px, 0) scale(1)'
+      },
+      {
+        transform: 'translate3d(' + PAUSE_SLOT_FINAL_X + 'px, 2px, 0) scale(' + PAUSE_SLOT_FINAL_SCALE + ')'
+      }
+    ], {
+      duration: SETTLE_SCALE_MS,
+      easing: PAUSE_SLOT_EASING,
+      fill: 'forwards'
+    });
+
+    this._pauseAnim.onfinish = function () {
+      self._pauseAnim = null;
+      self._finishPause();
+    };
+
+    this._haltLoop();
+  };
+
+  Test1GalaxyAiLogo.prototype._finishPause = function () {
+    this.coastingToRest = false;
+    this.settling = false;
+    this.settlePhase = '';
+    this.paused = true;
+    this.frame = this.frame - this._loopFrame() + REST_FRAME;
+    if (this.canvas) this.canvas.setAttribute('data-test1-ai-logo-paused', 'done');
+    var slot = this.canvas && this.canvas.closest('.test1-bottom-pill__ai-logo-slot');
+    if (slot) slot.style.willChange = '';
+    this._haltLoop();
+  };
+
   Test1GalaxyAiLogo.prototype.beginPauseToRest = function () {
-    if (this.paused || this.pausing) return;
-    this.pausing = true;
-    this.pauseT = 0;
-    this.pauseFromLoopFrame = this.frame % LOOP_FRAMES;
+    if (this.paused || this.coastingToRest || this.settling) return;
+    var wait = this._framesUntilRest();
+    if (wait === 0) {
+      this._runScaleWaapi();
+      return;
+    }
+    this.coastingToRest = true;
+    this.coastUntilFrame = this.frame + wait;
   };
 
   Test1GalaxyAiLogo.prototype.draw = function () {
@@ -296,25 +423,15 @@
     var currentBigColor;
     var wobbleAngle = sinDeg(this.frame * 0.5) * WOBBLE_DEG;
 
-    if (this.paused) {
+    if (this.paused || this._restDrawOnly) {
       state = computeFrameState(REST_FRAME);
       wobbleAngle = 0;
       pulseBig = 1;
       pulseTR = 1;
-    } else if (this.pausing) {
-      var pauseEase = easeInOutCubic(Math.min(1, this.pauseT));
-      var fromState = computeFrameState(this.pauseFromLoopFrame);
-      var toState = computeFrameState(REST_FRAME);
-      state = {
-        bigPos: vecLerp(fromState.bigPos, toState.bigPos, pauseEase),
-        bigAngle: lerp(fromState.bigAngle, toState.bigAngle, pauseEase),
-        trPos: vecLerp(fromState.trPos, toState.trPos, pauseEase),
-        trActiveScale: lerp(fromState.trActiveScale, toState.trActiveScale, pauseEase),
-        colorMorphAmt: lerp(fromState.colorMorphAmt, toState.colorMorphAmt, pauseEase)
-      };
-      pulseBig = lerp(1 + sinDeg(this.frame * 4) * 0.12, 1, pauseEase);
-      pulseTR = lerp(1 + sinDeg(this.frame * 5 + 135) * 0.15, 1, pauseEase);
-      wobbleAngle = lerp(wobbleAngle, 0, pauseEase);
+    } else if (this.coastingToRest) {
+      state = computeFrameState(this._loopFrame());
+      pulseBig = 1 + sinDeg(this.frame * 4) * 0.12;
+      pulseTR = 1 + sinDeg(this.frame * 5 + 135) * 0.15;
     } else {
       state = computeFrameState(frameInLoop);
       pulseBig = 1 + sinDeg(this.frame * 4) * 0.12;
@@ -362,20 +479,20 @@
     if (this.raf) return;
     var self = this;
     function loop() {
-      if (self.pausing) {
-        self.pauseT = Math.min(1, self.pauseT + 1 / PAUSE_BLEND_FRAMES);
+      self.raf = null;
+      if (self.coastingToRest) {
+        self.frame += 1;
         self.draw();
-        if (self.pauseT >= 1) {
-          self.paused = true;
-          self.pausing = false;
-          self.raf = null;
+        if (self.frame >= self.coastUntilFrame) {
+          self.coastingToRest = false;
+          self._runScaleWaapi();
           return;
         }
-      } else if (!self.paused) {
+      } else if (!self.paused && !self.settling) {
         self.frame += 1;
         self.draw();
       }
-      if (!self.paused) {
+      if (!self.paused && !self.settling) {
         self.raf = global.requestAnimationFrame(loop);
       }
     }
@@ -438,10 +555,11 @@
       inst.fitScale = layout.fitScale;
       inst.offsetX = layout.offsetX;
       inst.offsetY = layout.offsetY;
+      inst._clearPauseDomScale();
       inst.start();
       if (global.ResizeObserver && slot) {
         inst._resizeObs = new global.ResizeObserver(function () {
-          if (!inst.paused && !inst.pausing) inst.relayout();
+          if (!inst.paused && !inst.coastingToRest && !inst.settling) inst.relayout();
         });
         inst._resizeObs.observe(slot);
       }
@@ -468,6 +586,7 @@
     if (!canvas) return;
     var inst = INSTANCES.get(canvas);
     if (inst) {
+      inst._clearPauseDomScale();
       inst.stop();
       INSTANCES.delete(canvas);
     }

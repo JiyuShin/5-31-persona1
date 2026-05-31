@@ -5836,8 +5836,8 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
         '<svg class="test1-bottom-pill__svg" viewBox="0 0 200 53" fill="none" xmlns="http://www.w3.org/2000/svg">' +
           '<defs>' +
             '<style>' +
-              '@font-face{font-family:\'Pretendard SB\';src:url(\'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2\') format(\'woff2\');font-weight:600;font-style:normal;}' +
-              '.test1-bottom-pill__text--b,.test1-bottom-pill__text--b tspan{font-family:\'Pretendard SB\',sans-serif;font-weight:600;font-synthesis:none;}' +
+              '@font-face{font-family:\'Pretendard B\';src:url(\'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2\') format(\'woff2\');font-weight:700;font-style:normal;}' +
+              '.test1-bottom-pill__text--b,.test1-bottom-pill__text--b tspan{font-family:\'Pretendard B\',sans-serif;font-weight:700;font-synthesis:none;}' +
             '</style>' +
           '</defs>' +
           '<g class="test1-bottom-pill__icon-wrap">' +
@@ -9401,7 +9401,7 @@ function _ensureTest1GalaxyAiLogoScript(done) {
   }
   window.__mlpTest1GalaxyAiLogoLoading = [done];
   var script = document.createElement('script');
-  script.src = '/app/test1-galaxy-ai-logo.js' + (dev ? ('?t=' + Date.now()) : '?v=15');
+  script.src = '/app/test1-galaxy-ai-logo.js' + (dev ? ('?t=' + Date.now()) : '?v=23');
   script.setAttribute('data-mlp-test1-galaxy-ai-logo', '1');
   script.onload = function () {
     var queue = window.__mlpTest1GalaxyAiLogoLoading || [];
@@ -9451,21 +9451,21 @@ function _mountTest1BottomPillTextB(showFinal) {
     var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     text.setAttribute('class', 'test1-bottom-pill__text test1-bottom-pill__text--b');
     text.setAttribute('fill', '#155E75');
-    text.setAttribute('font-family', 'Pretendard SB, sans-serif');
+    text.setAttribute('font-family', 'Pretendard B, sans-serif');
     text.setAttribute('font-size', '10.2');
-    text.setAttribute('font-weight', '600');
+    text.setAttribute('font-weight', '700');
     text.setAttribute('letter-spacing', '-0.02em');
     var t1 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
     t1.setAttribute('x', '58');
     t1.setAttribute('y', '21.2');
-    t1.setAttribute('font-family', 'Pretendard SB, sans-serif');
-    t1.setAttribute('font-weight', '600');
+    t1.setAttribute('font-family', 'Pretendard B, sans-serif');
+    t1.setAttribute('font-weight', '700');
     t1.textContent = '저녁 식사 준비를 돕는';
     var t2 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
     t2.setAttribute('x', '58');
     t2.setAttribute('y', '37.2');
-    t2.setAttribute('font-family', 'Pretendard SB, sans-serif');
-    t2.setAttribute('font-weight', '600');
+    t2.setAttribute('font-family', 'Pretendard B, sans-serif');
+    t2.setAttribute('font-weight', '700');
     t2.textContent = '화면을 구성했어요.';
     text.appendChild(t1);
     text.appendChild(t2);
@@ -9509,6 +9509,10 @@ function _pauseTest1BottomPillAiLogo() {
   try {
     var pill = document.querySelector('#test1-bottom-pill');
     if (!pill) return;
+    if (window.__test1GalaxyAiLogo && typeof window.__test1GalaxyAiLogo.pause === 'function') {
+      window.__test1GalaxyAiLogo.pause(pill);
+      return;
+    }
     _ensureTest1GalaxyAiLogoScript(function () {
       if (window.__test1GalaxyAiLogo && typeof window.__test1GalaxyAiLogo.pause === 'function') {
         window.__test1GalaxyAiLogo.pause(pill);

@@ -13526,6 +13526,14 @@
   }
 
   @font-face {
+    font-family: 'Pretendard B';
+    src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
     font-family: 'Pretendard SB';
     src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2') format('woff2');
     font-weight: 600;
@@ -13600,8 +13608,8 @@
 
   #canvas[data-test-scope="test1"] .test1-bottom-pill__text--b,
   #canvas[data-test-scope="test1"] .test1-bottom-pill__text--b tspan {
-    font-family: 'Pretendard SB', 'Pretendard', var(--font), -apple-system, BlinkMacSystemFont, sans-serif;
-    font-weight: 600;
+    font-family: 'Pretendard B', 'Pretendard SB', 'Pretendard', var(--font), -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
     font-synthesis: none;
     font-size: 10.2px;
     letter-spacing: -0.02em;
@@ -13670,9 +13678,9 @@
 
   #canvas[data-test-scope="test1"] .test1-bottom-pill__text-a-shiny-line {
     display: block;
-    font-family: 'Pretendard SB', sans-serif;
+    font-family: 'Pretendard B', 'Pretendard SB', sans-serif;
     font-size: 10.2px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 16px;
     color: #155E75;
@@ -14025,7 +14033,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transform: translate(1.2px, 2px);
+    transform: translate3d(1.2px, 2px, 0);
+    transform-origin: 20% center;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  #canvas[data-test-scope="test1"] .test1-bottom-pill__ai-logo-slot[data-test1-ai-logo-paused] {
+    overflow: visible;
   }
 
   #canvas[data-test-scope="test1"] .test1-bottom-pill__ai-logo {
@@ -14035,6 +14050,10 @@
     transform: scale(var(--test1-pill-ai-logo-scale));
     transform-origin: center center;
     pointer-events: none;
+  }
+
+  #canvas[data-test-scope="test1"] .test1-bottom-pill__ai-logo[data-test1-ai-logo-paused] {
+    animation: none !important;
   }
 
   #canvas[data-test-scope="test1"][data-test1-coda-run] .test1-bottom-pill__ai-logo {
