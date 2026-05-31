@@ -9265,11 +9265,11 @@ var TEST1_SHORTCUTS_FADE_MS = 480;
 var TEST1_STACK_AFTER_GREEN_MS = 1500;
 var TEST1_STACK_INTRO_MS = 720;
 var TEST1_AFTER_STACK_MS = 3000;
+var TEST1_CODA_AFTER_STACK_MS = 2000;
 var TEST1_PILL_OUT_FADE_MS = 1250;
 var TEST1_PILL_OUT_GAP_MS = 420;
 var TEST1_GRADIENT_FLOW_MS = 4721;
 var TEST1_GRADIENT_OUT_FADE_MS = 3400;
-var TEST1_AFTER_GRADIENT_CODA_MS = 1500;
 var TEST1_PILL_BG_DELAY_MS = 550;
 var TEST1_PILL_BG_IN_MS = 950;
 var TEST1_PILL_ICON_TEXT_DELAY_MS = TEST1_PILL_BG_DELAY_MS;
@@ -9344,6 +9344,14 @@ function _clearTest1IntroTimer() {
     clearTimeout(window.__mlpTest1CodaTimer);
     window.__mlpTest1CodaTimer = null;
   }
+  if (window.__mlpTest1CodaAfterStackTimer) {
+    clearTimeout(window.__mlpTest1CodaAfterStackTimer);
+    window.__mlpTest1CodaAfterStackTimer = null;
+  }
+  if (window.__mlpTest1GradientSyncTimer) {
+    clearTimeout(window.__mlpTest1GradientSyncTimer);
+    window.__mlpTest1GradientSyncTimer = null;
+  }
   if (window.__mlpTest1CodaEndTimer) {
     clearTimeout(window.__mlpTest1CodaEndTimer);
     window.__mlpTest1CodaEndTimer = null;
@@ -9404,7 +9412,19 @@ function _runTest1StackIntro() {
     c.setAttribute('data-test1-stack-animate', '1');
     if (window.__mlpTestConfig) window.__mlpTestConfig.test1StackRun = true;
     _armTest1PillOutDelay(c);
+    _armTest1CodaAfterStack(c);
   } catch (_) {}
+}
+
+function _armTest1CodaAfterStack(canvas) {
+  if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
+  if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
+  if (canvas.getAttribute('data-test1-coda-run')) return;
+  if (window.__mlpTest1CodaAfterStackTimer) return;
+  window.__mlpTest1CodaAfterStackTimer = setTimeout(function () {
+    window.__mlpTest1CodaAfterStackTimer = null;
+    _runTest1CodaIntro();
+  }, TEST1_CODA_AFTER_STACK_MS);
 }
 
 function _armTest1PillOutDelay(canvas) {
@@ -9478,12 +9498,53 @@ function _runTest1PillOut() {
         _finishTest1PillOutAnimate(pillCanvas, doneWrap);
       } catch (_) {}
     }, TEST1_PILL_OUT_FADE_MS + 120);
-    if (window.__mlpTest1GradientStartTimer) return;
-    window.__mlpTest1GradientStartTimer = setTimeout(function () {
-      window.__mlpTest1GradientStartTimer = null;
-      _runTest1GradientSweep();
-    }, TEST1_PILL_OUT_FADE_MS + TEST1_PILL_OUT_GAP_MS);
   } catch (_) {}
+}
+
+function _finishTest1GradientOut(canvas) {
+  if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
+  canvas.setAttribute('data-test1-gradient-out', '1');
+  if (window.__mlpTestConfig) window.__mlpTestConfig.test1GradientOut = true;
+  canvas.removeAttribute('data-test1-gradient-animate');
+  canvas.removeAttribute('data-test1-gradient-out-animate');
+  if (window.__mlpTestConfig) window.__mlpTestConfig.test1GradientDone = true;
+}
+
+function _beginTest1GradientOutAnimate(canvas) {
+  if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
+  if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
+  if (canvas.getAttribute('data-test1-gradient-out-animate')) return;
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      try {
+        var c2 = document.getElementById('canvas');
+        if (!c2 || c2.getAttribute('data-test-scope') !== 'test1') return;
+        if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
+        c2.setAttribute('data-test1-gradient-out-animate', '1');
+      } catch (_) {}
+    });
+  });
+  if (window.__mlpTest1GradientOutTimer) return;
+  window.__mlpTest1GradientOutTimer = setTimeout(function () {
+    window.__mlpTest1GradientOutTimer = null;
+    try {
+      var finishCanvas = document.getElementById('canvas');
+      if (!finishCanvas || finishCanvas.getAttribute('data-test-scope') !== 'test1') return;
+      _finishTest1GradientOut(finishCanvas);
+    } catch (_) {}
+  }, TEST1_GRADIENT_OUT_FADE_MS);
+}
+
+function _armTest1TopGradientSync(canvas) {
+  if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
+  if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
+  if (window.__mlpTest1GradientSyncTimer) {
+    clearTimeout(window.__mlpTest1GradientSyncTimer);
+  }
+  window.__mlpTest1GradientSyncTimer = setTimeout(function () {
+    window.__mlpTest1GradientSyncTimer = null;
+    _runTest1GradientSweep();
+  }, TEST1_PILL_TEXT_A_SHIMMER_START_MS);
 }
 
 function _runTest1GradientSweep() {
@@ -9504,42 +9565,12 @@ function _runTest1GradientSweep() {
           if (window.__mlpTest1GradientEndTimer) return;
           window.__mlpTest1GradientEndTimer = setTimeout(function () {
             window.__mlpTest1GradientEndTimer = null;
-            requestAnimationFrame(function () {
-              requestAnimationFrame(function () {
-                try {
-                  var c2 = document.getElementById('canvas');
-                  if (!c2 || c2.getAttribute('data-test-scope') !== 'test1') return;
-                  if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
-                  c2.setAttribute('data-test1-gradient-out-animate', '1');
-                } catch (_) {}
-              });
-            });
-            if (window.__mlpTest1GradientOutTimer) return;
-            window.__mlpTest1GradientOutTimer = setTimeout(function () {
-              window.__mlpTest1GradientOutTimer = null;
-              canvas.setAttribute('data-test1-gradient-out', '1');
-              if (window.__mlpTestConfig) window.__mlpTestConfig.test1GradientOut = true;
-              canvas.removeAttribute('data-test1-gradient-animate');
-              canvas.removeAttribute('data-test1-gradient-out-animate');
-              if (window.__mlpTestConfig) window.__mlpTestConfig.test1GradientDone = true;
-              _armTest1CodaDelay(canvas);
-            }, TEST1_GRADIENT_OUT_FADE_MS);
+            _beginTest1GradientOutAnimate(canvas);
           }, TEST1_GRADIENT_FLOW_MS);
         } catch (_) {}
       });
     });
   } catch (_) {}
-}
-
-function _armTest1CodaDelay(canvas) {
-  if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
-  if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
-  if (canvas.getAttribute('data-test1-coda-run')) return;
-  if (window.__mlpTest1CodaTimer) return;
-  window.__mlpTest1CodaTimer = setTimeout(function () {
-    window.__mlpTest1CodaTimer = null;
-    _runTest1CodaIntro();
-  }, TEST1_AFTER_GRADIENT_CODA_MS);
 }
 
 function _runTest1CodaIntro() {
@@ -9559,6 +9590,7 @@ function _runTest1CodaIntro() {
           if (!c2 || c2.getAttribute('data-test-scope') !== 'test1') return;
           if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
           c2.setAttribute('data-test1-coda-animate', '1');
+          _armTest1TopGradientSync(c2);
         } catch (_) {}
       });
     });
