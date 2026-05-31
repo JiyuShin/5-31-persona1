@@ -12920,7 +12920,7 @@
     }
   }
 
-  /* test1 intro — green 3.5초 후 우리딸 rise-in + 롯데마트/pill 88px 아래로 (72 + 16 gap) */
+  /* test1 intro — green 1.5초 후 우리딸 rise-in + 롯데마트/pill 88px 아래로 (72 + 16 gap) */
   #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-now-bar-b"],
   #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-now-bar-b {
     display: block !important;
@@ -12932,7 +12932,21 @@
 
   #canvas[data-test-scope="test1"][data-test1-stack-animate][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]) .canvas-item[data-role="test1-now-bar-b"],
   #canvas[data-test-scope="test1"][data-test1-stack-animate][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]) #test1-now-bar-b {
-    animation: test1LotteIntro 0.72s cubic-bezier(0.33, 1, 0.68, 1) both;
+    animation: test1NowBarBIntro 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform, opacity;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  @keyframes test1NowBarBIntro {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 28px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
   }
 
   #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-now-bar"],
@@ -12978,22 +12992,16 @@
   }
 
   /* test1-assist-pill-motion-ver1:lifecycle-start */
-  /* test1 intro — stack 3초 후 assist pill fade out */
+  /* test1 intro — stack 3초 후 assist pill fade out (WAAPI in surface-layout.js) */
   #canvas[data-test-scope="test1"] {
-    --test1-pill-out-dur: 1.05s;
-  }
-
-  /* fade inner wrap only — canvas-item transform stays at stack offset (+88px) */
-  #canvas[data-test-scope="test1"][data-test1-pill-out-animate][data-test1-pill-out]:not([data-test1-reveal-all]) .test1-assist-pill-wrap {
-    animation: test1PillOutFade var(--test1-pill-out-dur) cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    transform: translate3d(0, 0, 0);
-    will-change: opacity;
+    --test1-pill-out-dur: 1.25s;
   }
 
   #canvas[data-test-scope="test1"][data-test1-pill-out-animate][data-test1-pill-out]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-assist-pill"],
   #canvas[data-test-scope="test1"][data-test1-pill-out-animate][data-test1-pill-out]:not([data-test1-reveal-all]) #test1-assist-pill {
     animation: none !important;
     opacity: 1 !important;
+    visibility: visible !important;
     pointer-events: none !important;
   }
 
@@ -13002,23 +13010,20 @@
     transform: translate3d(0, 88px, 0);
   }
 
-  #canvas[data-test-scope="test1"][data-test1-pill-out]:not([data-test1-reveal-all]):not([data-test1-pill-out-animate]) .test1-assist-pill-wrap {
+  #canvas[data-test-scope="test1"][data-test1-pill-out-done]:not([data-test1-reveal-all]) .test1-assist-pill-wrap {
     opacity: 0 !important;
     visibility: hidden !important;
-    animation: none !important;
-    transform: translate3d(0, 0, 0);
-    will-change: auto;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-pill-out]:not([data-test1-reveal-all]):not([data-test1-pill-out-animate]) .canvas-item[data-role="test1-assist-pill"],
-  #canvas[data-test-scope="test1"][data-test1-pill-out]:not([data-test1-reveal-all]):not([data-test1-pill-out-animate]) #test1-assist-pill {
+  #canvas[data-test-scope="test1"][data-test1-pill-out-done]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-assist-pill"],
+  #canvas[data-test-scope="test1"][data-test1-pill-out-done]:not([data-test1-reveal-all]) #test1-assist-pill {
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-pill-out][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-pill-out-animate]) .canvas-item[data-role="test1-assist-pill"],
-  #canvas[data-test-scope="test1"][data-test1-pill-out][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-pill-out-animate]) #test1-assist-pill {
+  #canvas[data-test-scope="test1"][data-test1-pill-out-done][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-assist-pill"],
+  #canvas[data-test-scope="test1"][data-test1-pill-out-done][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-assist-pill {
     transform: translate3d(0, 88px, 0);
   }
 
@@ -13027,18 +13032,6 @@
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
-  }
-
-  @keyframes test1PillOutFade {
-    0% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.72;
-    }
-    100% {
-      opacity: 0;
-    }
   }
 
   /* test1-assist-pill-motion-ver1:end */
@@ -13387,10 +13380,9 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    #canvas[data-test-scope="test1"][data-test1-pill-out-animate][data-test1-pill-out]:not([data-test1-reveal-all]) .test1-assist-pill-wrap {
-      animation: none;
-      opacity: 0;
-      visibility: hidden;
+    #canvas[data-test-scope="test1"][data-test1-pill-out-done]:not([data-test1-reveal-all]) .test1-assist-pill-wrap {
+      opacity: 0 !important;
+      visibility: hidden !important;
     }
     #canvas[data-test-scope="test1"][data-test1-pill-out-animate][data-test1-pill-out][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-assist-pill"],
     #canvas[data-test-scope="test1"][data-test1-pill-out-animate][data-test1-pill-out][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-assist-pill {

@@ -34,6 +34,7 @@ export default function Test1Page() {
         canvas.removeAttribute("data-test1-shortcuts-animate");
         canvas.removeAttribute("data-test1-pill-out");
         canvas.removeAttribute("data-test1-pill-out-animate");
+        canvas.removeAttribute("data-test1-pill-out-done");
         canvas.removeAttribute("data-test1-gradient-run");
         canvas.removeAttribute("data-test1-gradient-animate");
         canvas.removeAttribute("data-test1-gradient-out");

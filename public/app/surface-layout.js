@@ -9262,10 +9262,10 @@ var TEST1_PILL_ANIM_MS = 3800;
 var TEST1_ASSIST_PILL_INTRO_MS = 760;
 var TEST1_GREEN_AFTER_PILL_MS = 800;
 var TEST1_SHORTCUTS_FADE_MS = 480;
-var TEST1_STACK_AFTER_GREEN_MS = 3500;
+var TEST1_STACK_AFTER_GREEN_MS = 1500;
 var TEST1_STACK_INTRO_MS = 720;
 var TEST1_AFTER_STACK_MS = 3000;
-var TEST1_PILL_OUT_FADE_MS = 1050;
+var TEST1_PILL_OUT_FADE_MS = 1250;
 var TEST1_PILL_OUT_GAP_MS = 420;
 var TEST1_GRADIENT_FLOW_MS = 4721;
 var TEST1_GRADIENT_OUT_FADE_MS = 3400;
@@ -9427,25 +9427,65 @@ function _armTest1PillOutDelay(canvas) {
   }, TEST1_AFTER_STACK_MS);
 }
 
+function _finishTest1PillOutAnimate(canvas, wrap) {
+  if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
+  canvas.removeAttribute('data-test1-pill-out-animate');
+  canvas.setAttribute('data-test1-pill-out-done', '1');
+  if (wrap) {
+    wrap.style.opacity = '0';
+  }
+  if (window.__mlpTest1PillOutAnim) {
+    try { window.__mlpTest1PillOutAnim.cancel(); } catch (_) {}
+    window.__mlpTest1PillOutAnim = null;
+  }
+  if (window.__mlpTest1PillOutEndTimer) {
+    clearTimeout(window.__mlpTest1PillOutEndTimer);
+    window.__mlpTest1PillOutEndTimer = null;
+  }
+}
+
 function _runTest1PillOut() {
   try {
     var c = document.getElementById('canvas');
     if (!c || c.getAttribute('data-test-scope') !== 'test1') return;
     if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
     if (c.getAttribute('data-test1-pill-out')) return;
+    var wrap = c.querySelector('#test1-assist-pill .test1-assist-pill-wrap');
+    var pillItem = c.querySelector('#test1-assist-pill');
+    if (pillItem && c.getAttribute('data-test1-stack-run')) {
+      pillItem.style.transform = 'translate3d(0, 88px, 0)';
+    }
     c.setAttribute('data-test1-pill-out', '1');
     c.setAttribute('data-test1-pill-out-animate', '1');
     if (window.__mlpTestConfig) window.__mlpTestConfig.test1PillOut = true;
+    if (window.__mlpTest1PillOutAnim) {
+      try { window.__mlpTest1PillOutAnim.cancel(); } catch (_) {}
+      window.__mlpTest1PillOutAnim = null;
+    }
     if (window.__mlpTest1PillOutEndTimer) clearTimeout(window.__mlpTest1PillOutEndTimer);
+    if (wrap && typeof wrap.animate === 'function') {
+      wrap.style.opacity = '1';
+      window.__mlpTest1PillOutAnim = wrap.animate(
+        [{ opacity: 1 }, { opacity: 0 }],
+        {
+          duration: TEST1_PILL_OUT_FADE_MS,
+          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+          fill: 'forwards'
+        }
+      );
+      window.__mlpTest1PillOutAnim.onfinish = function () {
+        _finishTest1PillOutAnimate(c, wrap);
+      };
+    }
     window.__mlpTest1PillOutEndTimer = setTimeout(function () {
       window.__mlpTest1PillOutEndTimer = null;
       try {
         var pillCanvas = document.getElementById('canvas');
-        if (pillCanvas && pillCanvas.getAttribute('data-test-scope') === 'test1') {
-          pillCanvas.removeAttribute('data-test1-pill-out-animate');
-        }
+        if (!pillCanvas || pillCanvas.getAttribute('data-test-scope') !== 'test1') return;
+        var doneWrap = pillCanvas.querySelector('#test1-assist-pill .test1-assist-pill-wrap');
+        _finishTest1PillOutAnimate(pillCanvas, doneWrap);
       } catch (_) {}
-    }, TEST1_PILL_OUT_FADE_MS);
+    }, TEST1_PILL_OUT_FADE_MS + 120);
     if (window.__mlpTest1GradientStartTimer) return;
     window.__mlpTest1GradientStartTimer = setTimeout(function () {
       window.__mlpTest1GradientStartTimer = null;
@@ -9647,6 +9687,7 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
         canvas.removeAttribute('data-test1-shortcuts-animate');
         canvas.removeAttribute('data-test1-pill-out');
         canvas.removeAttribute('data-test1-pill-out-animate');
+        canvas.removeAttribute('data-test1-pill-out-done');
         canvas.removeAttribute('data-test1-gradient-run');
         canvas.removeAttribute('data-test1-gradient-animate');
         canvas.removeAttribute('data-test1-gradient-out');
@@ -9689,9 +9730,11 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
         }
         if (window.__mlpTestConfig && window.__mlpTestConfig.test1PillOut) {
           canvas.setAttribute('data-test1-pill-out', '1');
+          canvas.setAttribute('data-test1-pill-out-done', '1');
         } else {
           canvas.removeAttribute('data-test1-pill-out');
           canvas.removeAttribute('data-test1-pill-out-animate');
+          canvas.removeAttribute('data-test1-pill-out-done');
         }
         if (window.__mlpTestConfig && window.__mlpTestConfig.test1GradientRun) {
           canvas.setAttribute('data-test1-gradient-run', '1');
@@ -9806,6 +9849,7 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
     canvas.removeAttribute('data-test1-shortcuts-animate');
     canvas.removeAttribute('data-test1-pill-out');
     canvas.removeAttribute('data-test1-pill-out-animate');
+    canvas.removeAttribute('data-test1-pill-out-done');
     canvas.removeAttribute('data-test1-gradient-run');
     canvas.removeAttribute('data-test1-gradient-animate');
     canvas.removeAttribute('data-test1-gradient-out');
