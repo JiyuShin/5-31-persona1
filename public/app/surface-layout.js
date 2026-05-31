@@ -5839,20 +5839,6 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
               '@font-face{font-family:\'Pretendard SB\';src:url(\'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/woff2/Pretendard-SemiBold.woff2\') format(\'woff2\');font-weight:600;font-style:normal;}' +
               '.test1-bottom-pill__text--b,.test1-bottom-pill__text--b tspan{font-family:\'Pretendard SB\',sans-serif;font-weight:600;font-synthesis:none;}' +
             '</style>' +
-            '<linearGradient id="test1bp_text_a_highlight" gradientUnits="objectBoundingBox" x1="0" y1="0" x2="1" y2="0">' +
-              '<stop offset="0%" stop-color="white" stop-opacity="0"/>' +
-              '<stop offset="10%" stop-color="white" stop-opacity="0"/>' +
-              '<stop offset="24%" stop-color="white" stop-opacity="0.28"/>' +
-              '<stop offset="38%" stop-color="white" stop-opacity="0.72"/>' +
-              '<stop offset="50%" stop-color="white" stop-opacity="1"/>' +
-              '<stop offset="62%" stop-color="white" stop-opacity="0.72"/>' +
-              '<stop offset="76%" stop-color="white" stop-opacity="0.28"/>' +
-              '<stop offset="90%" stop-color="white" stop-opacity="0"/>' +
-              '<stop offset="100%" stop-color="white" stop-opacity="0"/>' +
-            '</linearGradient>' +
-            '<mask id="test1bp_text_a_mask" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="53">' +
-              '<path d="' + test1bpTextAPathD + '" fill="white"/>' +
-            '</mask>' +
           '</defs>' +
           '<g class="test1-bottom-pill__icon-wrap">' +
             '<circle class="test1-bottom-pill__icon" cx="26.2791" cy="26.2791" r="19.2713" fill="#155E75"/>' +
@@ -5864,24 +5850,16 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
             '<circle class="test1-bottom-pill__icon-ring" cx="26.2791" cy="26.2791" r="19.2713" fill="none" stroke="#FFFFFF" stroke-width="0.93"/>' +
           '</g>' +
           '<g class="test1-bottom-pill__text-stage">' +
+              '<g class="test1-bottom-pill__text-b-slot"></g>' +
               '<g class="test1-bottom-pill__text-a-stage">' +
-              '<path class="test1-bottom-pill__text test1-bottom-pill__text--a" d="' + test1bpTextAPathD + '" fill="#155E75"/>' +
-              '<g class="test1-bottom-pill__text-a-highlight" mask="url(#test1bp_text_a_mask)">' +
-                '<g class="test1-bottom-pill__text-a-highlight-track test1-bottom-pill__text-a-highlight-track--1">' +
-                  '<rect x="-54" y="9" width="108" height="35" fill="url(#test1bp_text_a_highlight)"/>' +
-                '</g>' +
-                '<g class="test1-bottom-pill__text-a-highlight-track test1-bottom-pill__text-a-highlight-track--2">' +
-                  '<rect x="-54" y="9" width="108" height="35" fill="url(#test1bp_text_a_highlight)"/>' +
-                '</g>' +
-                '<g class="test1-bottom-pill__text-a-highlight-track test1-bottom-pill__text-a-highlight-track--3">' +
-                  '<rect x="-54" y="9" width="108" height="35" fill="url(#test1bp_text_a_highlight)"/>' +
-                '</g>' +
-              '</g>' +
+              '<path class="test1-bottom-pill__text test1-bottom-pill__text--a" d="' + test1bpTextAPathD + '" fill="transparent" aria-hidden="true"/>' +
+              '<foreignObject x="56" y="10" width="140" height="38" class="test1-bottom-pill__text-a-fo">' +
+                '<div xmlns="http://www.w3.org/1999/xhtml" class="test1-bottom-pill__text-a-shiny">' +
+                  '<span class="test1-bottom-pill__text-a-shiny-line">귀가 후 저녁 준비</span>' +
+                  '<span class="test1-bottom-pill__text-a-shiny-line">화면 구성 중</span>' +
+                '</div>' +
+              '</foreignObject>' +
             '</g>' +
-            '<text class="test1-bottom-pill__text test1-bottom-pill__text--b" fill="#155E75" font-family="Pretendard SB, sans-serif" font-size="10.2" font-weight="600" letter-spacing="-0.02em">' +
-              '<tspan x="58" y="21.2" font-family="Pretendard SB, sans-serif" font-weight="600">저녁 식사 준비를 돕는</tspan>' +
-              '<tspan x="58" y="37.2" font-family="Pretendard SB, sans-serif" font-weight="600">화면을 구성했어요.</tspan>' +
-            '</text>' +
           '</g>' +
         '</svg>' +
         '<div class="test1-bottom-pill__text-sweep">' +
@@ -9271,8 +9249,9 @@ var TEST1_PILL_TEXT_B_LEAD_MS = 850;
 var TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS = 1000;
 var TEST1_PILL_ICON_AFTER_SHELL_MS = 220;
 var TEST1_PILL_PRE_PINK_AFTER_ICON_MS = 280;
+var TEST1_PILL_AI_LOGO_AFTER_ICON_GAP_MS = 120;
 var TEST1_PILL_ICON_TEXT_DELAY_MS = TEST1_PILL_BG_DELAY_MS + TEST1_PILL_BG_IN_MS + TEST1_PILL_ICON_AFTER_SHELL_MS;
-var TEST1_PILL_AI_LOGO_START_MS = TEST1_PILL_ICON_TEXT_DELAY_MS + TEST1_PILL_BG_IN_MS;
+var TEST1_PILL_AI_LOGO_START_MS = TEST1_PILL_BG_DELAY_MS + TEST1_PILL_BG_IN_MS + TEST1_PILL_AI_LOGO_AFTER_ICON_GAP_MS;
 var TEST1_PILL_AI_LOGO_FADE_MS = 480;
 var TEST1_TOP_GRADIENT_TOTAL_MS = TEST1_GRADIENT_FLOW_MS + TEST1_GRADIENT_OUT_FADE_MS;
 var TEST1_PILL_PRE_PINK_START_MS = TEST1_PILL_ICON_TEXT_DELAY_MS + TEST1_PILL_BG_IN_MS + TEST1_PILL_PRE_PINK_AFTER_ICON_MS;
@@ -9367,6 +9346,11 @@ function _clearTest1IntroTimer() {
     clearTimeout(window.__mlpTest1PinkFlowStopTimer);
     window.__mlpTest1PinkFlowStopTimer = null;
   }
+  if (window.__mlpTest1TextBMountTimer) {
+    clearTimeout(window.__mlpTest1TextBMountTimer);
+    window.__mlpTest1TextBMountTimer = null;
+  }
+  _unmountTest1BottomPillTextB();
   _unmountTest1BottomPillAiLogo();
   if (window.__mlpTest1AiLogoMountTimer) {
     clearTimeout(window.__mlpTest1AiLogoMountTimer);
@@ -9428,6 +9412,78 @@ function _ensureTest1GalaxyAiLogoScript(done) {
     window.__mlpTest1GalaxyAiLogoLoading = null;
   };
   document.head.appendChild(script);
+}
+
+function _getTest1BottomPillSvg() {
+  var wrap = document.querySelector('#test1-bottom-pill');
+  if (!wrap) return null;
+  return wrap.querySelector('.test1-bottom-pill__svg');
+}
+
+function _unmountTest1BottomPillTextB() {
+  try {
+    var svg = _getTest1BottomPillSvg();
+    if (svg) {
+      var stage = svg.querySelector('.test1-bottom-pill__text-b-stage');
+      if (stage && stage.parentNode) {
+        var slot = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        slot.setAttribute('class', 'test1-bottom-pill__text-b-slot');
+        stage.parentNode.replaceChild(slot, stage);
+      }
+    }
+    var canvas = document.getElementById('canvas');
+    if (canvas) canvas.removeAttribute('data-test1-pill-text-b');
+  } catch (_) {}
+}
+
+function _mountTest1BottomPillTextB(showFinal) {
+  try {
+    var canvas = document.getElementById('canvas');
+    if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
+    if (!showFinal && !canvas.getAttribute('data-test1-coda-animate')) return;
+    var svg = _getTest1BottomPillSvg();
+    if (!svg || svg.querySelector('.test1-bottom-pill__text-b-stage')) return;
+    var slot = svg.querySelector('.test1-bottom-pill__text-b-slot');
+    if (!slot || !slot.parentNode) return;
+
+    var stage = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    stage.setAttribute('class', 'test1-bottom-pill__text-b-stage');
+    var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    text.setAttribute('class', 'test1-bottom-pill__text test1-bottom-pill__text--b');
+    text.setAttribute('fill', '#155E75');
+    text.setAttribute('font-family', 'Pretendard SB, sans-serif');
+    text.setAttribute('font-size', '10.2');
+    text.setAttribute('font-weight', '600');
+    text.setAttribute('letter-spacing', '-0.02em');
+    var t1 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+    t1.setAttribute('x', '58');
+    t1.setAttribute('y', '21.2');
+    t1.setAttribute('font-family', 'Pretendard SB, sans-serif');
+    t1.setAttribute('font-weight', '600');
+    t1.textContent = '저녁 식사 준비를 돕는';
+    var t2 = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+    t2.setAttribute('x', '58');
+    t2.setAttribute('y', '37.2');
+    t2.setAttribute('font-family', 'Pretendard SB, sans-serif');
+    t2.setAttribute('font-weight', '600');
+    t2.textContent = '화면을 구성했어요.';
+    text.appendChild(t1);
+    text.appendChild(t2);
+    stage.appendChild(text);
+    slot.parentNode.replaceChild(stage, slot);
+    canvas.setAttribute('data-test1-pill-text-b', showFinal ? 'done' : '1');
+  } catch (_) {}
+}
+
+function _armTest1BottomPillTextBMount() {
+  if (window.__mlpTest1TextBMountTimer) {
+    clearTimeout(window.__mlpTest1TextBMountTimer);
+    window.__mlpTest1TextBMountTimer = null;
+  }
+  window.__mlpTest1TextBMountTimer = setTimeout(function () {
+    window.__mlpTest1TextBMountTimer = null;
+    _mountTest1BottomPillTextB(false);
+  }, TEST1_PILL_TEXT_B_DELAY_MS);
 }
 
 function _armTest1BottomPillAiLogoMount() {
@@ -9676,6 +9732,7 @@ function _runTest1CodaIntro() {
     if (!c || c.getAttribute('data-test-scope') !== 'test1') return;
     if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
     if (c.getAttribute('data-test1-coda-run')) return;
+    _unmountTest1BottomPillTextB();
     c.setAttribute('data-test1-coda-run', '1');
     if (window.__mlpTestConfig) {
       window.__mlpTestConfig.test1CodaRun = true;
@@ -9688,6 +9745,7 @@ function _runTest1CodaIntro() {
           if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
           c2.setAttribute('data-test1-coda-animate', '1');
           _armTest1BottomPillAiLogoMount();
+          _armTest1BottomPillTextBMount();
           _armTest1TopGradientSync(c2);
         } catch (_) {}
       });
@@ -9699,6 +9757,8 @@ function _runTest1CodaIntro() {
           var c2 = document.getElementById('canvas');
           if (!c2 || c2.getAttribute('data-test-scope') !== 'test1') return;
           c2.setAttribute('data-test1-coda-done', '1');
+          c2.setAttribute('data-test1-pill-text-b', 'done');
+          _mountTest1BottomPillTextB(true);
           c2.removeAttribute('data-test1-coda-animate');
           if (window.__mlpTestConfig) window.__mlpTestConfig.test1CodaDone = true;
         } catch (_) {}
@@ -9875,6 +9935,7 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
           canvas.removeAttribute('data-test1-coda-run');
           canvas.removeAttribute('data-test1-coda-animate');
           canvas.removeAttribute('data-test1-coda-done');
+          canvas.removeAttribute('data-test1-pill-text-b');
         }
       }
     } else {
@@ -9988,6 +10049,13 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
             break;
           }
         }
+      }
+      if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) {
+        _mountTest1BottomPillTextB(true);
+      } else if (canvas.getAttribute('data-test1-pill-text-b')) {
+        _mountTest1BottomPillTextB(canvas.getAttribute('data-test1-pill-text-b') === 'done');
+      } else if (window.__mlpTestConfig && window.__mlpTestConfig.test1CodaDone) {
+        _mountTest1BottomPillTextB(true);
       }
       if (window.__mlpTestConfig && !window.__mlpTestConfig.test1RevealAll) {
         _armTest1IntroDelay(canvas);

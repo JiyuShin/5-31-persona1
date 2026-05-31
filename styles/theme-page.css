@@ -13515,6 +13515,11 @@
     visibility: hidden;
   }
 
+  #canvas[data-test-scope="test1"][data-test1-reveal-all] .test1-bottom-pill__text-b-stage {
+    opacity: 1;
+    visibility: visible;
+  }
+
   #canvas[data-test-scope="test1"][data-test1-reveal-all] .test1-bottom-pill__text--b {
     opacity: 1;
     visibility: visible;
@@ -13602,7 +13607,42 @@
     letter-spacing: -0.02em;
   }
 
-  #canvas[data-test-scope="test1"] .test1-bottom-pill__text--a,
+  #canvas[data-test-scope="test1"] .test1-bottom-pill__text-b-slot {
+    display: none;
+  }
+
+  #canvas[data-test-scope="test1"]:not([data-test1-pill-text-b]) .test1-bottom-pill__text-b-stage,
+  #canvas[data-test-scope="test1"]:not([data-test1-pill-text-b]) .test1-bottom-pill__text--b {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  #canvas[data-test-scope="test1"] .test1-bottom-pill__text--a {
+    fill: none;
+    pointer-events: none;
+  }
+
+  #canvas[data-test-scope="test1"] .test1-bottom-pill__text-b-stage {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  #canvas[data-test-scope="test1"][data-test1-pill-text-b]:not([data-test1-pill-text-b="done"]) .test1-bottom-pill__text-b-stage {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    animation: test1PillTextBIn var(--test1-pill-text-b-dur) var(--test1-pill-text-ease) 0s forwards;
+  }
+
+  #canvas[data-test-scope="test1"][data-test1-pill-text-b="done"] .test1-bottom-pill__text-b-stage,
+  #canvas[data-test-scope="test1"][data-test1-reveal-all] .test1-bottom-pill__text-b-stage {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
   #canvas[data-test-scope="test1"] .test1-bottom-pill__text--b {
     fill: #155E75;
   }
@@ -13613,23 +13653,36 @@
     stroke-width: 0.93px;
   }
 
-  #canvas[data-test-scope="test1"] .test1-bottom-pill__text-a-highlight {
-    opacity: 0;
+  #canvas[data-test-scope="test1"] .test1-bottom-pill__text-a-fo {
+    overflow: visible;
     pointer-events: none;
-    mix-blend-mode: screen;
-    isolation: isolate;
   }
 
-  @property --test1-pill-text-a-highlight-x {
-    syntax: '<percentage>';
-    inherits: false;
-    initial-value: -4%;
+  #canvas[data-test-scope="test1"] .test1-bottom-pill__text-a-shiny {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
   }
 
-  #canvas[data-test-scope="test1"] .test1-bottom-pill__text-a-highlight-track {
-    --test1-pill-text-a-highlight-x: -4%;
-    opacity: 0;
-    transform: translateX(calc((var(--test1-pill-text-a-highlight-x) + 4%) * 1.85));
+  #canvas[data-test-scope="test1"] .test1-bottom-pill__text-a-shiny-line {
+    display: block;
+    font-family: 'Pretendard SB', sans-serif;
+    font-size: 10.2px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 16px;
+    color: #155E75;
+    white-space: nowrap;
+    background-image: linear-gradient(120deg, #155E75 0%, #155E75 35%, #ffffff 50%, #155E75 65%, #155E75 100%);
+    background-size: 200% auto;
+    background-position: 150% center;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   #canvas[data-test-scope="test1"] .test1-bottom-pill__text-sweep {
@@ -13788,9 +13841,11 @@
     --test1-pill-bg-in-dur: 0.95s;
     --test1-pill-icon-after-shell-gap: 0.22s;
     --test1-pill-pre-pink-after-icon-gap: 0.28s;
+    --test1-pill-icon-delay: var(--test1-pill-bg-delay);
     --test1-pill-icon-text-delay: calc(var(--test1-pill-bg-delay) + var(--test1-pill-bg-in-dur) + var(--test1-pill-icon-after-shell-gap));
     --test1-pill-icon-in-dur: var(--test1-pill-bg-in-dur);
-    --test1-pill-ai-logo-start: calc(var(--test1-pill-icon-text-delay) + var(--test1-pill-icon-in-dur));
+    --test1-pill-ai-logo-after-icon-gap: 0.12s;
+    --test1-pill-ai-logo-start: calc(var(--test1-pill-bg-delay) + var(--test1-pill-bg-in-dur) + var(--test1-pill-ai-logo-after-icon-gap));
     --test1-pill-ai-logo-fade-dur: 0.48s;
     --test1-pill-text-a-in-dur: var(--test1-pill-bg-in-dur);
     --test1-pill-content-ease: cubic-bezier(0.33, 1, 0.68, 1);
@@ -13800,10 +13855,8 @@
     --test1-pill-pre-pink-start: calc(var(--test1-pill-icon-text-delay) + var(--test1-pill-icon-in-dur) + var(--test1-pill-pre-pink-after-icon-gap));
     --test1-pill-text-a-reveal-start: calc(var(--test1-pill-pre-pink-start) + var(--test1-top-gradient-total));
     --test1-pill-text-a-shimmer-start: calc(var(--test1-pill-text-a-reveal-start) + var(--test1-pill-text-a-in-dur) + var(--test1-pill-text-a-shimmer-delay));
-    --test1-pill-text-a-highlight-pass-dur: 2.85s;
-    --test1-pill-text-a-highlight-pass-step: 0.5s;
-    --test1-pill-text-a-highlight-overlap: calc(var(--test1-pill-text-a-highlight-pass-dur) - var(--test1-pill-text-a-highlight-pass-step));
-    --test1-pill-text-a-shimmer-dur: calc(var(--test1-pill-text-a-highlight-pass-dur) + var(--test1-pill-text-a-highlight-pass-step) * 2);
+    --test1-pill-text-a-shiny-speed: 2s;
+    --test1-pill-text-a-shimmer-dur: 3.85s;
     --test1-pill-text-sweep-dur: calc(var(--test1-pass-dur) + var(--test1-pass-step) * 2);
     --test1-pill-text-ease: cubic-bezier(0.22, 1, 0.36, 1);
     --test1-pill-text-a-out-dur: 1.15s;
@@ -13921,7 +13974,7 @@
     height: var(--test1-coda-shortcut-icon) !important;
   }
 
-  /* pillar — shell first, then left pink icon, then pre-pink gradient */
+  /* pillar — shell + left circle together, then star motion */
   #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill {
     opacity: 0;
     transform: translate3d(0, 8px, 0);
@@ -13988,11 +14041,6 @@
     opacity: 0;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-run] .test1-bottom-pill__text--b {
-    opacity: 0;
-    visibility: hidden;
-  }
-
   #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__bg-base {
     opacity: 1;
   }
@@ -14009,16 +14057,12 @@
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     will-change: opacity, transform;
-    animation: test1PillIconIn var(--test1-pill-icon-in-dur) var(--test1-pill-content-ease) var(--test1-pill-icon-text-delay) forwards;
+    animation: test1PillIconIn var(--test1-pill-icon-in-dur) var(--test1-pill-content-ease) var(--test1-pill-icon-delay) forwards;
   }
 
   #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__ai-logo {
     opacity: 0;
     animation: test1PillAiLogoFadeIn var(--test1-pill-ai-logo-fade-dur) var(--test1-pill-content-ease) var(--test1-pill-ai-logo-start) forwards;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text--a {
-    animation: test1PillTextADimBase 0.4s ease var(--test1-pill-text-a-shimmer-start) forwards;
   }
 
   #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-a-stage {
@@ -14030,20 +14074,8 @@
       test1PillTextAOut var(--test1-pill-text-a-out-dur) var(--test1-pill-text-a-out-ease) var(--test1-pill-text-fadeout-delay) forwards;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-a-highlight {
-    animation: test1PillTextAHighlightOn 0.01s linear var(--test1-pill-text-a-shimmer-start) forwards;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-a-highlight-track--1 {
-    animation: test1PillTextAHighlightPass var(--test1-pill-text-a-highlight-pass-dur) linear var(--test1-pill-text-a-shimmer-start) infinite;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-a-highlight-track--2 {
-    animation: test1PillTextAHighlightPass var(--test1-pill-text-a-highlight-pass-dur) linear calc(var(--test1-pill-text-a-shimmer-start) + var(--test1-pill-text-a-highlight-pass-step)) infinite;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-a-highlight-track--3 {
-    animation: test1PillTextAHighlightPass var(--test1-pill-text-a-highlight-pass-dur) linear calc(var(--test1-pill-text-a-shimmer-start) + var(--test1-pill-text-a-highlight-pass-step) * 2) infinite;
+  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-a-shiny-line {
+    animation: test1PillTextAShinySweep var(--test1-pill-text-a-shiny-speed) linear var(--test1-pill-text-a-shimmer-start) infinite;
   }
 
   #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-sweep {
@@ -14089,14 +14121,6 @@
     animation: test1PillGradFillPass var(--test1-pass-dur) linear calc(var(--test1-pill-pink-sweep-start) + var(--test1-pill-grad-pass-step) * 2) forwards;
   }
 
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text--b {
-    opacity: 0;
-    visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    animation: test1PillTextBIn var(--test1-pill-text-b-dur) var(--test1-pill-text-ease) var(--test1-pill-text-b-delay) forwards;
-  }
-
   #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__bg-base,
   #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__icon-wrap,
   #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__ai-logo {
@@ -14137,6 +14161,12 @@
   #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__text-a-stage {
     opacity: 0;
     visibility: hidden;
+    transform: none;
+  }
+
+  #canvas[data-test-scope="test1"][data-test1-coda-run][data-test1-coda-done]:not([data-test1-reveal-all]) .test1-bottom-pill__text-b-stage {
+    opacity: 1;
+    visibility: visible;
     transform: none;
   }
 
@@ -14251,19 +14281,9 @@
     }
   }
 
-  @keyframes test1PillTextADimBase {
-    from { fill: #155E75; }
-    to { fill: rgba(21, 94, 117, 0.52); }
-  }
-
-  @keyframes test1PillTextAHighlightOn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes test1PillTextAHighlightPass {
-    0% { --test1-pill-text-a-highlight-x: -4%; opacity: 1; }
-    100% { --test1-pill-text-a-highlight-x: 128%; opacity: 1; }
+  @keyframes test1PillTextAShinySweep {
+    0% { background-position: 150% center; }
+    100% { background-position: -50% center; }
   }
 
   @keyframes test1PillTextFillPass {
@@ -14346,7 +14366,7 @@
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__icon-wrap,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__ai-logo,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-sweep,
-    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text--b,
+    #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__text-b-stage,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep-track,
     #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track {
       animation: none;
