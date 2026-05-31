@@ -9227,7 +9227,6 @@ var TEST1_STACK_INTRO_MS = 720;
 var TEST1_AFTER_STACK_MS = 3000;
 var TEST1_PILL_OUT_FADE_MS = 1250;
 var TEST1_PILL_OUT_GAP_MS = 420;
-var TEST1_GRADIENT_OUT_FADE_MS = 3400;
 var TEST1_PILL_BG_DELAY_MS = 550;
 var TEST1_PILL_BG_IN_MS = 950;
 var TEST1_PILL_TEXT_A_IN_MS = TEST1_PILL_BG_IN_MS;
@@ -9236,8 +9235,13 @@ var TEST1_PASS_DUR_MS = 1667;
 var TEST1_PASS_OVERLAP_MS = 240;
 var TEST1_PASS_STEP_MS = TEST1_PASS_DUR_MS - TEST1_PASS_OVERLAP_MS;
 var TEST1_GRADIENT_COMP_STAGGER_MS = 100;
-/* 2 fill passes (track 1+2, same rule on a/b/green), then dissolve */
-var TEST1_GRADIENT_FLOW_MS = TEST1_GRADIENT_COMP_STAGGER_MS * 2 + TEST1_PASS_STEP_MS + TEST1_PASS_DUR_MS;
+var TEST1_GRADIENT_COMP_FADE_DUR_MS = 880;
+var TEST1_GRADIENT_COMP_FADE_GAP_MS = 220;
+var TEST1_GRADIENT_COMP_FADE_TOTAL_MS = TEST1_GRADIENT_COMP_FADE_GAP_MS * 2 + TEST1_GRADIENT_COMP_FADE_DUR_MS;
+var TEST1_GRADIENT_OUT_FADE_MS = TEST1_GRADIENT_COMP_FADE_TOTAL_MS + 120;
+var TEST1_GRADIENT_THIRD_PASS_START_MS = TEST1_PASS_STEP_MS * 2;
+/* 3 fill passes (track 1+2+3), fade out starts with 3rd pass on top component */
+var TEST1_GRADIENT_FLOW_MS = TEST1_GRADIENT_COMP_STAGGER_MS * 2 + TEST1_PASS_STEP_MS * 2 + TEST1_PASS_DUR_MS;
 var TEST1_PILL_GRAD_PASS_OVERLAP_MS = 620;
 var TEST1_PILL_GRAD_PASS_STEP_MS = TEST1_PASS_DUR_MS - TEST1_PILL_GRAD_PASS_OVERLAP_MS;
 var TEST1_PILL_TEXT_SWEEP_MS = TEST1_PASS_DUR_MS + TEST1_PASS_STEP_MS * 2;
@@ -9253,7 +9257,7 @@ var TEST1_PILL_AI_LOGO_AFTER_ICON_GAP_MS = 120;
 var TEST1_PILL_ICON_TEXT_DELAY_MS = TEST1_PILL_BG_DELAY_MS + TEST1_PILL_BG_IN_MS + TEST1_PILL_ICON_AFTER_SHELL_MS;
 var TEST1_PILL_AI_LOGO_START_MS = TEST1_PILL_BG_DELAY_MS + TEST1_PILL_BG_IN_MS + TEST1_PILL_AI_LOGO_AFTER_ICON_GAP_MS;
 var TEST1_PILL_AI_LOGO_FADE_MS = 480;
-var TEST1_TOP_GRADIENT_TOTAL_MS = TEST1_GRADIENT_FLOW_MS + TEST1_GRADIENT_OUT_FADE_MS;
+var TEST1_TOP_GRADIENT_TOTAL_MS = TEST1_GRADIENT_THIRD_PASS_START_MS + TEST1_GRADIENT_OUT_FADE_MS;
 var TEST1_PILL_PRE_PINK_START_MS = TEST1_PILL_ICON_TEXT_DELAY_MS + TEST1_PILL_BG_IN_MS + TEST1_PILL_PRE_PINK_AFTER_ICON_MS;
 var TEST1_PILL_TEXT_A_REVEAL_START_MS = TEST1_PILL_PRE_PINK_START_MS + TEST1_TOP_GRADIENT_TOTAL_MS;
 var TEST1_PILL_TEXT_A_SHIMMER_START_MS = TEST1_PILL_TEXT_A_REVEAL_START_MS + TEST1_PILL_TEXT_A_IN_MS + TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS;
@@ -9309,6 +9313,12 @@ function _clearTest1IntroTimer() {
   if (window.__mlpTest1GradientOutTimer) {
     clearTimeout(window.__mlpTest1GradientOutTimer);
     window.__mlpTest1GradientOutTimer = null;
+  }
+  if (window.__mlpTest1GradientCompAnims && window.__mlpTest1GradientCompAnims.length) {
+    window.__mlpTest1GradientCompAnims.forEach(function (anim) {
+      try { if (anim) anim.cancel(); } catch (_) {}
+    });
+    window.__mlpTest1GradientCompAnims = null;
   }
   if (window.__mlpTest1CodaTimer) {
     clearTimeout(window.__mlpTest1CodaTimer);
@@ -9660,6 +9670,12 @@ function _runTest1PillOut() {
 
 function _finishTest1GradientOut(canvas) {
   if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
+  if (window.__mlpTest1GradientCompAnims && window.__mlpTest1GradientCompAnims.length) {
+    window.__mlpTest1GradientCompAnims.forEach(function (anim) {
+      try { if (anim) anim.cancel(); } catch (_) {}
+    });
+    window.__mlpTest1GradientCompAnims = null;
+  }
   canvas.setAttribute('data-test1-gradient-out', '1');
   if (window.__mlpTestConfig) window.__mlpTestConfig.test1GradientOut = true;
   canvas.removeAttribute('data-test1-gradient-animate');
@@ -9667,19 +9683,56 @@ function _finishTest1GradientOut(canvas) {
   if (window.__mlpTestConfig) window.__mlpTestConfig.test1GradientDone = true;
 }
 
+function _test1GradientFadeVisual(canvas, itemId) {
+  if (!canvas || !itemId) return null;
+  var item = canvas.querySelector('#' + itemId);
+  if (!item) return null;
+  if (itemId === 'test1-transit-card') {
+    return item;
+  }
+  return item.querySelector('.test1-now-bar-b, .test1-now-bar, img') || item;
+}
+
+function _runTest1GradientCompLiftFade(el, delayMs) {
+  if (!el || typeof el.animate !== 'function') return null;
+  el.style.opacity = '1';
+  return el.animate(
+    [
+      { opacity: 1, transform: 'translate3d(0, 0, 0)' },
+      { opacity: 0, transform: 'translate3d(0, -10px, 0)' }
+    ],
+    {
+      duration: TEST1_GRADIENT_COMP_FADE_DUR_MS,
+      delay: delayMs,
+      easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+      fill: 'forwards'
+    }
+  );
+}
+
 function _beginTest1GradientOutAnimate(canvas) {
   if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
   if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
   if (canvas.getAttribute('data-test1-gradient-out-animate')) return;
-  requestAnimationFrame(function () {
-    requestAnimationFrame(function () {
-      try {
-        var c2 = document.getElementById('canvas');
-        if (!c2 || c2.getAttribute('data-test-scope') !== 'test1') return;
-        if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
-        c2.setAttribute('data-test1-gradient-out-animate', '1');
-      } catch (_) {}
+  canvas.setAttribute('data-test1-gradient-out-animate', '1');
+  if (window.__mlpTest1GradientCompAnims && window.__mlpTest1GradientCompAnims.length) {
+    window.__mlpTest1GradientCompAnims.forEach(function (anim) {
+      try { if (anim) anim.cancel(); } catch (_) {}
     });
+  }
+  window.__mlpTest1GradientCompAnims = [];
+  var fadeOrder = [
+    { compId: 'test1-now-bar-b', sweepId: 'test1-gradient-sweep-a', delay: 0 },
+    { compId: 'test1-now-bar', sweepId: 'test1-gradient-sweep-b', delay: TEST1_GRADIENT_COMP_FADE_GAP_MS },
+    { compId: 'test1-transit-card', sweepId: 'test1-gradient-sweep-c', delay: TEST1_GRADIENT_COMP_FADE_GAP_MS * 2 }
+  ];
+  fadeOrder.forEach(function (entry) {
+    var visual = _test1GradientFadeVisual(canvas, entry.compId);
+    var sweepItem = canvas.querySelector('#' + entry.sweepId);
+    var compAnim = _runTest1GradientCompLiftFade(visual, entry.delay);
+    var sweepAnim = _runTest1GradientCompLiftFade(sweepItem, entry.delay);
+    if (compAnim) window.__mlpTest1GradientCompAnims.push(compAnim);
+    if (sweepAnim) window.__mlpTest1GradientCompAnims.push(sweepAnim);
   });
   if (window.__mlpTest1GradientOutTimer) return;
   window.__mlpTest1GradientOutTimer = setTimeout(function () {
@@ -9723,7 +9776,7 @@ function _runTest1GradientSweep() {
           window.__mlpTest1GradientEndTimer = setTimeout(function () {
             window.__mlpTest1GradientEndTimer = null;
             _beginTest1GradientOutAnimate(canvas);
-          }, TEST1_GRADIENT_FLOW_MS);
+          }, TEST1_GRADIENT_THIRD_PASS_START_MS);
         } catch (_) {}
       });
     });

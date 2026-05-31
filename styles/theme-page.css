@@ -12909,10 +12909,10 @@
     }
   }
 
-  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-now-bar"],
-  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-now-bar,
-  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-assist-pill"],
-  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-assist-pill {
+  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out]) .canvas-item[data-role="test1-now-bar"],
+  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out]) #test1-now-bar,
+  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out]) .canvas-item[data-role="test1-assist-pill"],
+  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out]) #test1-assist-pill {
     transform: translate3d(0, 88px, 0);
   }
 
@@ -13084,7 +13084,8 @@
     --test1-pass-step: calc(var(--test1-pass-dur) - var(--test1-pass-overlap));
     --test1-out-dur: 3.4s;
     --test1-gradient-comp-stagger: 0.1s;
-    --test1-gradient-flow-dur: calc(var(--test1-gradient-comp-stagger) * 2 + var(--test1-pass-step) + var(--test1-pass-dur));
+    --test1-gradient-flow-dur: calc(var(--test1-gradient-comp-stagger) * 2 + var(--test1-pass-step) * 2 + var(--test1-pass-dur));
+    --test1-gradient-third-pass-start: calc(var(--test1-pass-step) * 2);
   }
 
   #canvas[data-test-scope="test1"] #test1-gradient-sweep-a { --test1-gradient-comp-lag: 0s; }
@@ -13092,8 +13093,8 @@
   #canvas[data-test-scope="test1"] #test1-gradient-sweep-c { --test1-gradient-comp-lag: calc(var(--test1-gradient-comp-stagger) * 2); }
 
   /*
-   * 2 fill passes (track 1+2), same rule on a/b/green — only comp-lag differs (0 / 0.1s / 0.2s).
-   * Keyframes untouched — only track--3 fill removed (was 3rd sweep).
+   * 3 fill passes (track 1+2+3), same rule on a/b/green — only comp-lag differs.
+   * Out phase: component + paired sweep fade together via WAAPI in surface-layout.js.
    */
   #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-a .test1-gradient-sweep__track--1,
   #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-b .test1-gradient-sweep__track--1,
@@ -13107,6 +13108,12 @@
     animation: test1GradientFillPass var(--test1-pass-dur) linear calc(var(--test1-gradient-comp-lag) + var(--test1-pass-step)) forwards;
   }
 
+  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-a .test1-gradient-sweep__track--3,
+  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-b .test1-gradient-sweep__track--3,
+  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-c .test1-gradient-sweep__track--3 {
+    animation: test1GradientFillPass var(--test1-pass-dur) linear calc(var(--test1-gradient-comp-lag) + var(--test1-pass-step) * 2) forwards;
+  }
+
   @property --test1-out-fill {
     syntax: '<percentage>';
     inherits: true;
@@ -13118,7 +13125,7 @@
     100% { --test1-fill: 128%; opacity: 1; }
   }
 
-  /* 3rd phase — original airy dissolve left→right, all 3 components + sweeps together */
+  /* out phase — freeze sweep fill; paired canvas-item fade via WAAPI */
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] .canvas-item[data-role="test1-now-bar-b"],
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] #test1-now-bar-b,
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] .canvas-item[data-role="test1-now-bar"],
@@ -13129,97 +13136,15 @@
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] #test1-gradient-sweep-a,
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] #test1-gradient-sweep-b,
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] #test1-gradient-sweep-c {
-    --test1-out-fill: 0%;
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    animation: test1GradientFlowOut var(--test1-out-dur) cubic-bezier(0.19, 1, 0.22, 1) forwards;
-    -webkit-mask-image: linear-gradient(
-      90deg,
-      transparent 0%,
-      transparent calc(var(--test1-out-fill) - 44%),
-      rgba(0, 0, 0, 0.02) calc(var(--test1-out-fill) - 34%),
-      rgba(0, 0, 0, 0.06) calc(var(--test1-out-fill) - 26%),
-      rgba(0, 0, 0, 0.12) calc(var(--test1-out-fill) - 18%),
-      rgba(0, 0, 0, 0.22) calc(var(--test1-out-fill) - 11%),
-      rgba(0, 0, 0, 0.34) calc(var(--test1-out-fill) - 5%),
-      rgba(0, 0, 0, 0.48) calc(var(--test1-out-fill) + 2%),
-      rgba(0, 0, 0, 0.62) calc(var(--test1-out-fill) + 12%),
-      rgba(0, 0, 0, 0.76) calc(var(--test1-out-fill) + 24%),
-      rgba(0, 0, 0, 0.88) calc(var(--test1-out-fill) + 38%),
-      #000 calc(var(--test1-out-fill) + 54%),
-      #000 100%
-    );
-    mask-image: linear-gradient(
-      90deg,
-      transparent 0%,
-      transparent calc(var(--test1-out-fill) - 44%),
-      rgba(0, 0, 0, 0.02) calc(var(--test1-out-fill) - 34%),
-      rgba(0, 0, 0, 0.06) calc(var(--test1-out-fill) - 26%),
-      rgba(0, 0, 0, 0.12) calc(var(--test1-out-fill) - 18%),
-      rgba(0, 0, 0, 0.22) calc(var(--test1-out-fill) - 11%),
-      rgba(0, 0, 0, 0.34) calc(var(--test1-out-fill) - 5%),
-      rgba(0, 0, 0, 0.48) calc(var(--test1-out-fill) + 2%),
-      rgba(0, 0, 0, 0.62) calc(var(--test1-out-fill) + 12%),
-      rgba(0, 0, 0, 0.76) calc(var(--test1-out-fill) + 24%),
-      rgba(0, 0, 0, 0.88) calc(var(--test1-out-fill) + 38%),
-      #000 calc(var(--test1-out-fill) + 54%),
-      #000 100%
-    );
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-now-bar"],
-  #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-now-bar {
-    transform: translate3d(0, 88px, 0);
+    animation: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
   }
 
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] .test1-gradient-sweep__track {
     --test1-fill: 128%;
     opacity: 1;
-    animation: test1GradientSweepAirOut var(--test1-out-dur) cubic-bezier(0.19, 1, 0.22, 1) forwards;
-  }
-
-  @keyframes test1GradientFlowOut {
-    0% {
-      --test1-out-fill: -20%;
-      opacity: 1;
-      filter: blur(0px);
-    }
-    18% {
-      opacity: 0.97;
-      filter: blur(0.18px);
-    }
-    42% {
-      opacity: 0.84;
-      filter: blur(0.55px);
-    }
-    68% {
-      opacity: 0.48;
-      filter: blur(1.8px);
-    }
-    100% {
-      --test1-out-fill: 125%;
-      opacity: 0;
-      filter: blur(5px);
-    }
-  }
-
-  @keyframes test1GradientSweepAirOut {
-    0% {
-      opacity: 1;
-      filter: blur(0px);
-    }
-    30% {
-      opacity: 0.92;
-      filter: blur(0.25px);
-    }
-    62% {
-      opacity: 0.62;
-      filter: blur(1px);
-    }
-    100% {
-      opacity: 0;
-      filter: blur(2.4px);
-    }
+    animation: none !important;
   }
 
   #canvas[data-test-scope="test1"][data-test1-gradient-out][data-test1-gradient-run]:not([data-test1-gradient-out-animate]):not([data-test1-reveal-all]) .canvas-item[data-role="test1-now-bar-b"],
@@ -13354,9 +13279,8 @@
     #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] #test1-gradient-sweep-b,
     #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] #test1-gradient-sweep-c {
       animation: none;
-      --test1-out-fill: 125%;
       opacity: 0;
-      filter: blur(5px);
+      filter: none;
     }
   }
 
