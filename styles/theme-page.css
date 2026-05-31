@@ -13083,43 +13083,28 @@
     --test1-pass-overlap: 0.24s;
     --test1-pass-step: calc(var(--test1-pass-dur) - var(--test1-pass-overlap));
     --test1-out-dur: 3.4s;
+    --test1-gradient-comp-stagger: 0.1s;
+    --test1-gradient-flow-dur: calc(var(--test1-gradient-comp-stagger) * 2 + var(--test1-pass-step) + var(--test1-pass-dur));
   }
 
-  /* 3 passes in ~5s — next pass starts before previous ends (no pause after full cover) */
-  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-a .test1-gradient-sweep__track--1 {
-    animation: test1GradientFillPass var(--test1-pass-dur) linear 0s forwards;
-  }
+  #canvas[data-test-scope="test1"] #test1-gradient-sweep-a { --test1-gradient-comp-lag: 0s; }
+  #canvas[data-test-scope="test1"] #test1-gradient-sweep-b { --test1-gradient-comp-lag: var(--test1-gradient-comp-stagger); }
+  #canvas[data-test-scope="test1"] #test1-gradient-sweep-c { --test1-gradient-comp-lag: calc(var(--test1-gradient-comp-stagger) * 2); }
 
-  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-a .test1-gradient-sweep__track--2 {
-    animation: test1GradientFillPass var(--test1-pass-dur) linear var(--test1-pass-step) forwards;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-a .test1-gradient-sweep__track--3 {
-    animation: test1GradientFillPass var(--test1-pass-dur) linear calc(var(--test1-pass-step) * 2) forwards;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-b .test1-gradient-sweep__track--1 {
-    animation: test1GradientFillPass var(--test1-pass-dur) linear 0.1s forwards;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-b .test1-gradient-sweep__track--2 {
-    animation: test1GradientFillPass var(--test1-pass-dur) linear calc(0.1s + var(--test1-pass-step)) forwards;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-b .test1-gradient-sweep__track--3 {
-    animation: test1GradientFillPass var(--test1-pass-dur) linear calc(0.1s + var(--test1-pass-step) * 2) forwards;
-  }
-
+  /*
+   * 2 fill passes (track 1+2), same rule on a/b/green — only comp-lag differs (0 / 0.1s / 0.2s).
+   * Keyframes untouched — only track--3 fill removed (was 3rd sweep).
+   */
+  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-a .test1-gradient-sweep__track--1,
+  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-b .test1-gradient-sweep__track--1,
   #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-c .test1-gradient-sweep__track--1 {
-    animation: test1GradientFillPass var(--test1-pass-dur) linear 0.2s forwards;
+    animation: test1GradientFillPass var(--test1-pass-dur) linear var(--test1-gradient-comp-lag) forwards;
   }
 
+  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-a .test1-gradient-sweep__track--2,
+  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-b .test1-gradient-sweep__track--2,
   #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-c .test1-gradient-sweep__track--2 {
-    animation: test1GradientFillPass var(--test1-pass-dur) linear calc(0.2s + var(--test1-pass-step)) forwards;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-gradient-animate][data-test1-gradient-run]:not([data-test1-gradient-out]):not([data-test1-gradient-out-animate]) #test1-gradient-sweep-c .test1-gradient-sweep__track--3 {
-    animation: test1GradientFillPass var(--test1-pass-dur) linear calc(0.2s + var(--test1-pass-step) * 2) forwards;
+    animation: test1GradientFillPass var(--test1-pass-dur) linear calc(var(--test1-gradient-comp-lag) + var(--test1-pass-step)) forwards;
   }
 
   @property --test1-out-fill {
@@ -13133,7 +13118,7 @@
     100% { --test1-fill: 128%; opacity: 1; }
   }
 
-  /* 4th pass — airy dissolve left→right, all 3 components + sweeps together */
+  /* 3rd phase — original airy dissolve left→right, all 3 components + sweeps together */
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] .canvas-item[data-role="test1-now-bar-b"],
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] #test1-now-bar-b,
   #canvas[data-test-scope="test1"][data-test1-gradient-out-animate][data-test1-gradient-run] .canvas-item[data-role="test1-now-bar"],
@@ -13844,41 +13829,51 @@
     );
   }
 
-  /* 327deg — moving teal→pink band + text-sweep dissolve mask (3 staggered tracks) */
+  /* 327deg — blue↔pink sweep: wide pure zones + very wide 2-color blend */
   #canvas[data-test-scope="test1"] .test1-bottom-pill__grad-sweep-track {
     --test1-pill-grad-fill: -4%;
     --test1-pill-grad-angle: 327deg;
+    --test1-pill-grad-blue: #155E75;
+    --test1-pill-grad-pink: #EECBFF;
+    --test1-pill-grad-tail: 165%;
+    --test1-pill-grad-blend-half: 78%;
     transform: translate3d(0, 0, 0);
     background: linear-gradient(
       var(--test1-pill-grad-angle),
-      #155E75 calc(var(--test1-pill-grad-fill) - 52%),
-      #EECBFF calc(var(--test1-pill-grad-fill) + 52%)
+      var(--test1-pill-grad-blue) calc(var(--test1-pill-grad-fill) - var(--test1-pill-grad-tail)),
+      var(--test1-pill-grad-blue) calc(var(--test1-pill-grad-fill) - var(--test1-pill-grad-blend-half)),
+      var(--test1-pill-grad-pink) calc(var(--test1-pill-grad-fill) + var(--test1-pill-grad-blend-half)),
+      var(--test1-pill-grad-pink) calc(var(--test1-pill-grad-fill) + var(--test1-pill-grad-tail))
     );
     -webkit-mask-image: linear-gradient(
       var(--test1-pill-grad-angle),
       #000 0%,
-      #000 calc(var(--test1-pill-grad-fill) - 28%),
-      rgba(0, 0, 0, 0.94) calc(var(--test1-pill-grad-fill) - 20%),
-      rgba(0, 0, 0, 0.78) calc(var(--test1-pill-grad-fill) - 13%),
-      rgba(0, 0, 0, 0.58) calc(var(--test1-pill-grad-fill) - 7%),
-      rgba(0, 0, 0, 0.36) calc(var(--test1-pill-grad-fill) - 1%),
-      rgba(0, 0, 0, 0.18) calc(var(--test1-pill-grad-fill) + 8%),
-      rgba(0, 0, 0, 0.08) calc(var(--test1-pill-grad-fill) + 16%),
-      rgba(0, 0, 0, 0.02) calc(var(--test1-pill-grad-fill) + 24%),
-      transparent calc(var(--test1-pill-grad-fill) + 34%)
+      #000 calc(var(--test1-pill-grad-fill) - 38%),
+      rgba(0, 0, 0, 0.94) calc(var(--test1-pill-grad-fill) - 30%),
+      rgba(0, 0, 0, 0.82) calc(var(--test1-pill-grad-fill) - 22%),
+      rgba(0, 0, 0, 0.66) calc(var(--test1-pill-grad-fill) - 15%),
+      rgba(0, 0, 0, 0.48) calc(var(--test1-pill-grad-fill) - 9%),
+      rgba(0, 0, 0, 0.3) calc(var(--test1-pill-grad-fill) - 4%),
+      rgba(0, 0, 0, 0.16) calc(var(--test1-pill-grad-fill) + 2%),
+      rgba(0, 0, 0, 0.08) calc(var(--test1-pill-grad-fill) + 8%),
+      rgba(0, 0, 0, 0.035) calc(var(--test1-pill-grad-fill) + 16%),
+      rgba(0, 0, 0, 0.012) calc(var(--test1-pill-grad-fill) + 24%),
+      transparent calc(var(--test1-pill-grad-fill) + 36%)
     );
     mask-image: linear-gradient(
       var(--test1-pill-grad-angle),
       #000 0%,
-      #000 calc(var(--test1-pill-grad-fill) - 28%),
-      rgba(0, 0, 0, 0.94) calc(var(--test1-pill-grad-fill) - 20%),
-      rgba(0, 0, 0, 0.78) calc(var(--test1-pill-grad-fill) - 13%),
-      rgba(0, 0, 0, 0.58) calc(var(--test1-pill-grad-fill) - 7%),
-      rgba(0, 0, 0, 0.36) calc(var(--test1-pill-grad-fill) - 1%),
-      rgba(0, 0, 0, 0.18) calc(var(--test1-pill-grad-fill) + 8%),
-      rgba(0, 0, 0, 0.08) calc(var(--test1-pill-grad-fill) + 16%),
-      rgba(0, 0, 0, 0.02) calc(var(--test1-pill-grad-fill) + 24%),
-      transparent calc(var(--test1-pill-grad-fill) + 34%)
+      #000 calc(var(--test1-pill-grad-fill) - 38%),
+      rgba(0, 0, 0, 0.94) calc(var(--test1-pill-grad-fill) - 30%),
+      rgba(0, 0, 0, 0.82) calc(var(--test1-pill-grad-fill) - 22%),
+      rgba(0, 0, 0, 0.66) calc(var(--test1-pill-grad-fill) - 15%),
+      rgba(0, 0, 0, 0.48) calc(var(--test1-pill-grad-fill) - 9%),
+      rgba(0, 0, 0, 0.3) calc(var(--test1-pill-grad-fill) - 4%),
+      rgba(0, 0, 0, 0.16) calc(var(--test1-pill-grad-fill) + 2%),
+      rgba(0, 0, 0, 0.08) calc(var(--test1-pill-grad-fill) + 8%),
+      rgba(0, 0, 0, 0.035) calc(var(--test1-pill-grad-fill) + 16%),
+      rgba(0, 0, 0, 0.012) calc(var(--test1-pill-grad-fill) + 24%),
+      transparent calc(var(--test1-pill-grad-fill) + 36%)
     );
   }
 
@@ -13914,7 +13909,7 @@
     --test1-pill-content-ease: cubic-bezier(0.33, 1, 0.68, 1);
     --test1-pill-text-hold: 3s;
     --test1-pill-text-a-shimmer-delay: 1s;
-    --test1-top-gradient-total: 8.121s;
+    --test1-top-gradient-total: calc(var(--test1-gradient-flow-dur) + var(--test1-out-dur));
     --test1-pill-pre-pink-start: calc(var(--test1-pill-icon-text-delay) + var(--test1-pill-text-a-in-dur) + var(--test1-pill-text-a-shimmer-delay));
     --test1-pill-text-a-reveal-start: calc(var(--test1-pill-pre-pink-start) + var(--test1-top-gradient-total));
     --test1-pill-text-a-shimmer-start: calc(var(--test1-pill-text-a-reveal-start) + var(--test1-pill-text-a-in-dur) + var(--test1-pill-text-a-shimmer-delay));
@@ -13935,7 +13930,8 @@
     --test1-pill-grad-pass-overlap: 0.62s;
     --test1-pill-grad-pass-step: calc(var(--test1-pass-dur) - var(--test1-pill-grad-pass-overlap));
     --test1-pill-pink-flow-dur: calc(var(--test1-pass-dur) + var(--test1-pill-grad-pass-step) * 2);
-    --test1-pill-pre-pink-sweep-end: calc(var(--test1-pill-pre-pink-start) + var(--test1-pill-pink-flow-dur));
+    --test1-pill-pre-pink-flow-dur: var(--test1-gradient-flow-dur);
+    --test1-pill-pre-pink-sweep-end: calc(var(--test1-pill-pre-pink-start) + var(--test1-pill-pre-pink-flow-dur));
     --test1-pill-pink-sweep-end: calc(var(--test1-pill-pink-sweep-start) + var(--test1-pill-pink-flow-dur));
     --test1-pill-text-b-lead: 0.85s;
     --test1-pill-cover-hold-dur: calc(var(--test1-pill-pink-flow-delay) - var(--test1-pill-bg-delay));
@@ -14147,11 +14143,6 @@
   #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track--2 {
     opacity: 1;
     animation: test1PillGradFillPass var(--test1-pass-dur) linear calc(var(--test1-pill-pre-pink-start) + var(--test1-pill-grad-pass-step)) forwards;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep--pre .test1-bottom-pill__grad-sweep-track--3 {
-    opacity: 1;
-    animation: test1PillGradFillPass var(--test1-pass-dur) linear calc(var(--test1-pill-pre-pink-start) + var(--test1-pill-grad-pass-step) * 2) forwards;
   }
 
   #canvas[data-test-scope="test1"][data-test1-coda-animate][data-test1-coda-run]:not([data-test1-reveal-all]) .test1-bottom-pill__grad-sweep:not(.test1-bottom-pill__grad-sweep--pre) {

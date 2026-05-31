@@ -9270,10 +9270,8 @@ var TEST1_SHORTCUTS_FADE_MS = 480;
 var TEST1_STACK_AFTER_GREEN_MS = 1500;
 var TEST1_STACK_INTRO_MS = 720;
 var TEST1_AFTER_STACK_MS = 3000;
-var TEST1_CODA_AFTER_STACK_MS = 2000;
 var TEST1_PILL_OUT_FADE_MS = 1250;
 var TEST1_PILL_OUT_GAP_MS = 420;
-var TEST1_GRADIENT_FLOW_MS = 4721;
 var TEST1_GRADIENT_OUT_FADE_MS = 3400;
 var TEST1_PILL_BG_DELAY_MS = 550;
 var TEST1_PILL_BG_IN_MS = 950;
@@ -9283,6 +9281,9 @@ var TEST1_PILL_TEXT_HOLD_MS = 3000;
 var TEST1_PASS_DUR_MS = 1667;
 var TEST1_PASS_OVERLAP_MS = 240;
 var TEST1_PASS_STEP_MS = TEST1_PASS_DUR_MS - TEST1_PASS_OVERLAP_MS;
+var TEST1_GRADIENT_COMP_STAGGER_MS = 100;
+/* 2 fill passes (track 1+2, same rule on a/b/green), then dissolve */
+var TEST1_GRADIENT_FLOW_MS = TEST1_GRADIENT_COMP_STAGGER_MS * 2 + TEST1_PASS_STEP_MS + TEST1_PASS_DUR_MS;
 var TEST1_PILL_GRAD_PASS_OVERLAP_MS = 620;
 var TEST1_PILL_GRAD_PASS_STEP_MS = TEST1_PASS_DUR_MS - TEST1_PILL_GRAD_PASS_OVERLAP_MS;
 var TEST1_PILL_TEXT_SWEEP_MS = TEST1_PASS_DUR_MS + TEST1_PASS_STEP_MS * 2;
@@ -9420,19 +9421,20 @@ function _runTest1StackIntro() {
     c.setAttribute('data-test1-stack-animate', '1');
     if (window.__mlpTestConfig) window.__mlpTestConfig.test1StackRun = true;
     _armTest1PillOutDelay(c);
-    _armTest1CodaAfterStack(c);
   } catch (_) {}
 }
 
-function _armTest1CodaAfterStack(canvas) {
+function _armTest1CodaAfterPillOut(canvas) {
   if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
   if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
   if (canvas.getAttribute('data-test1-coda-run')) return;
-  if (window.__mlpTest1CodaAfterStackTimer) return;
+  if (window.__mlpTest1CodaAfterStackTimer) {
+    clearTimeout(window.__mlpTest1CodaAfterStackTimer);
+  }
   window.__mlpTest1CodaAfterStackTimer = setTimeout(function () {
     window.__mlpTest1CodaAfterStackTimer = null;
     _runTest1CodaIntro();
-  }, TEST1_CODA_AFTER_STACK_MS);
+  }, TEST1_PILL_OUT_GAP_MS);
 }
 
 function _armTest1PillOutDelay(canvas) {
@@ -9462,6 +9464,7 @@ function _finishTest1PillOutAnimate(canvas, wrap) {
     clearTimeout(window.__mlpTest1PillOutEndTimer);
     window.__mlpTest1PillOutEndTimer = null;
   }
+  _armTest1CodaAfterPillOut(canvas);
 }
 
 function _runTest1PillOut() {
