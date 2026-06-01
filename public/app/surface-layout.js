@@ -9222,7 +9222,7 @@ var TEST1_PILL_BG_DELAY_MS = 350;
 var TEST1_PILL_BG_IN_MS = 950;
 var TEST1_PILL_TEXT_A_IN_MS = 1520;
 var TEST1_PILL_TEXT_HOLD_MS = 3000;
-var TEST1_TOP_GRADIENT_VER3_ENABLED = false;
+var TEST1_TOP_GRADIENT_VER3_ENABLED = true;
 var TEST1_PASS_DUR_MS = 1667;
 var TEST1_PASS_OVERLAP_MS = 240;
 var TEST1_PASS_STEP_MS = TEST1_PASS_DUR_MS - TEST1_PASS_OVERLAP_MS;
@@ -9259,6 +9259,10 @@ var TEST1_PILL_TEXT_A_SHIMMER_DUR_MS = TEST1_PILL_TEXT_A_HIGHLIGHT_PASS_MS + TES
 var TEST1_PILL_PINK_FLOW_DELAY_MS = TEST1_PILL_TEXT_A_SHIMMER_START_MS + TEST1_PILL_TEXT_A_SHIMMER_DUR_MS;
 var TEST1_PILL_PINK_SWEEP_START_MS = TEST1_PILL_PINK_FLOW_DELAY_MS;
 var TEST1_PILL_TEXT_B_DELAY_MS = TEST1_PILL_PINK_FLOW_DELAY_MS + TEST1_PILL_PINK_FLOW_MS + TEST1_PILL_TEXT_B_GAP_AFTER_PINK_MS;
+var TEST1_PILL_TEXT_A_OUT_START_MS = TEST1_PILL_PINK_SWEEP_START_MS - TEST1_PILL_TEXT_A_OUT_MS;
+/* ver3 — start with text-a out, finish lift-fade when text-b mounts */
+var TEST1_VER3_GRADIENT_START_MS = TEST1_PILL_TEXT_A_OUT_START_MS;
+var TEST1_VER3_OUT_TRIGGER_MS = TEST1_PILL_TEXT_B_DELAY_MS - TEST1_PILL_TEXT_A_OUT_START_MS - TEST1_GRADIENT_OUT_FADE_MS;
 var TEST1_PILL_AI_LOGO_PAUSE_MS = TEST1_PILL_TEXT_B_DELAY_MS;
 var TEST1_CODA_FADE_IN_MS = TEST1_PILL_TEXT_B_DELAY_MS + TEST1_PILL_TEXT_B_DUR_MS + 500;
 var TEST1_STACK_ITEM_GAP_PX = 16;
@@ -9662,7 +9666,7 @@ function _armTest1TopGradientSync(canvas) {
   window.__mlpTest1GradientSyncTimer = setTimeout(function () {
     window.__mlpTest1GradientSyncTimer = null;
     _runTest1GradientSweep();
-  }, TEST1_PILL_PRE_PINK_START_MS);
+  }, TEST1_VER3_GRADIENT_START_MS);
 }
 
 function _runTest1GradientSweep() {
@@ -9685,7 +9689,7 @@ function _runTest1GradientSweep() {
           window.__mlpTest1GradientEndTimer = setTimeout(function () {
             window.__mlpTest1GradientEndTimer = null;
             _beginTest1GradientOutAnimate(canvas);
-          }, TEST1_GRADIENT_THIRD_PASS_START_MS);
+          }, TEST1_VER3_OUT_TRIGGER_MS);
         } catch (_) {}
       });
     });

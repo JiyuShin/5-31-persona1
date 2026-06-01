@@ -18,7 +18,7 @@ When the user asks to **apply / restore ver3** (or "ver3 적용"):
 ## VER3 behavior (reference)
 
 ### In phase (gradient fill on top stack)
-- Trigger: coda `data-test1-coda-animate` → `_armTest1TopGradientSync` at `TEST1_PILL_PRE_PINK_START_MS`.
+- Trigger: coda `data-test1-coda-animate` → `_armTest1TopGradientSync` at `TEST1_VER3_GRADIENT_START_MS` (= text-a fade-out start).
 - Sets `data-test1-gradient-run` + double rAF → `data-test1-gradient-animate`.
 - 3 overlay sweeps (`test1-gradient-sweep-a/b/c`) each run `test1GradientFillPass` on tracks 1→2→3 with per-component lag (0 / 100ms / 200ms).
 - Paired components:
@@ -27,7 +27,7 @@ When the user asks to **apply / restore ver3** (or "ver3 적용"):
   - sweep-c ↔ `test1-transit-card` (green)
 
 ### Out phase (ver3 exit — sequential lift-fade)
-- Starts at **3rd pass** on top bar: `TEST1_GRADIENT_THIRD_PASS_START_MS` after animate begins.
+- Starts at `TEST1_VER3_OUT_TRIGGER_MS` after gradient-animate (lift-fade ends when text-b mounts).
 - `_beginTest1GradientOutAnimate` sets `data-test1-gradient-out-animate`.
 - **WAAPI** (not CSS mask dissolve) on inner visuals + sweep canvas-items:
   - opacity 1→0, translateY 0→-10px
@@ -43,6 +43,8 @@ Functions:
 - `_beginTest1GradientOutAnimate`, `_runTest1GradientCompLiftFade`, `_test1GradientFadeVisual`, `_finishTest1GradientOut`
 
 Constants (ver3 reference values):
+- `TEST1_VER3_GRADIENT_START_MS` = `TEST1_PILL_PINK_SWEEP_START_MS - TEST1_PILL_TEXT_A_OUT_MS`
+- `TEST1_VER3_OUT_TRIGGER_MS` = `TEST1_PILL_TEXT_B_DELAY_MS - TEST1_VER3_GRADIENT_START_MS - TEST1_GRADIENT_OUT_FADE_MS`
 - `TEST1_PASS_DUR_MS = 1667`, `TEST1_PASS_OVERLAP_MS = 240`
 - `TEST1_GRADIENT_COMP_STAGGER_MS = 100`
 - `TEST1_GRADIENT_COMP_FADE_DUR_MS = 880`, `TEST1_GRADIENT_COMP_FADE_GAP_MS = 220`
