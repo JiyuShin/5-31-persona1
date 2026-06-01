@@ -1,5 +1,5 @@
 <svg viewBox="0 0 333 152" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect width="332.866" height="151.714" rx="39.6269" fill="url(#test1tc_paint0_linear_5410_19018)"/>
+<rect width="332.866" height="151.714" rx="39.6269" fill="#9DC5B7"/>
 <g filter="url(#test1tc_filter0_d_5410_19018)">
 <path d="M27.1758 45.8542C27.1759 32.0556 31.1184 23.7764 49.2536 23.7764C67.3889 23.7764 71.3315 31.0699 71.3315 45.8542C71.3315 61.6241 64.6294 67.9321 49.2536 67.9321C35.6521 67.9321 27.1757 62.8069 27.1758 45.8542Z" fill="url(#test1tc_pattern0_5410_19018)"/>
 </g>
@@ -43,7 +43,7 @@
 </filter>
 <linearGradient id="test1tc_paint0_linear_5410_19018" x1="82.2422" y1="52.9404" x2="442.057" y2="-73.8733" gradientUnits="userSpaceOnUse">
 <stop stop-color="#9DC5B7"/>
-<stop offset="1" stop-color="#EECBFF"/>
+<stop offset="1" stop-color="#9DC5B7"/>
 </linearGradient>
 <clipPath id="test1tc_clip0_5410_19018">
 <rect width="21.5118" height="21.5118" fill="white" transform="translate(108.234 73.5928) rotate(43.1698)"/>

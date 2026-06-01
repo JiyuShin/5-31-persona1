@@ -12851,7 +12851,7 @@
     }
   }
 
-  /* test1 intro — green: shortcut 바로 위에서 rise-in (shortcut 유지) */
+  /* test1 intro — green: 롯데마트 등장 1.8s 후 rise-in */
   #canvas[data-test-scope="test1"][data-test1-green-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]) .canvas-item[data-role="test1-transit-card"],
   #canvas[data-test-scope="test1"][data-test1-green-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]) #test1-transit-card {
     display: block !important;
@@ -12880,7 +12880,7 @@
     }
   }
 
-  /* test1 intro — green 1.5초 후 우리딸 rise-in + 롯데마트/pill 88px 아래로 (72 + 16 gap) */
+  /* test1 intro — green 1.2s 후 우리딸 rise-in + 롯데마트 88px 아래로 (72 + 16 gap) */
   #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-now-bar-b"],
   #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-now-bar-b {
     display: block !important;
@@ -12910,19 +12910,12 @@
   }
 
   #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out]) .canvas-item[data-role="test1-now-bar"],
-  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out]) #test1-now-bar,
-  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out]) .canvas-item[data-role="test1-assist-pill"],
-  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out]) #test1-assist-pill {
+  #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out]) #test1-now-bar {
     transform: translate3d(0, 88px, 0);
   }
 
   #canvas[data-test-scope="test1"][data-test1-stack-animate][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]) .canvas-item[data-role="test1-now-bar"],
   #canvas[data-test-scope="test1"][data-test1-stack-animate][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]) #test1-now-bar {
-    animation: test1StackShift 0.72s cubic-bezier(0.33, 1, 0.68, 1) both;
-  }
-
-  #canvas[data-test-scope="test1"][data-test1-stack-animate][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]):not([data-test1-pill-out-animate]):not([data-test1-pill-out]) .canvas-item[data-role="test1-assist-pill"],
-  #canvas[data-test-scope="test1"][data-test1-stack-animate][data-test1-stack-run]:not([data-test1-reveal-all]):not([data-test1-gradient-out-animate]):not([data-test1-gradient-out]):not([data-test1-pill-out-animate]):not([data-test1-pill-out]) #test1-assist-pill {
     animation: test1StackShift 0.72s cubic-bezier(0.33, 1, 0.68, 1) both;
   }
 
@@ -12943,16 +12936,14 @@
       transform: none;
     }
     #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-now-bar"],
-    #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-now-bar,
-    #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) .canvas-item[data-role="test1-assist-pill"],
-    #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-assist-pill {
+    #canvas[data-test-scope="test1"][data-test1-stack-run]:not([data-test1-reveal-all]) #test1-now-bar {
       animation: none;
       transform: translate3d(0, 88px, 0);
     }
   }
 
   /* test1-assist-pill-motion-ver1:lifecycle-start */
-  /* test1 intro — stack 3초 후 assist pill fade out (WAAPI in surface-layout.js) */
+  /* test1 intro — stack 1.5s 후 bottom pillar coda (surface-layout.js) */
   #canvas[data-test-scope="test1"] {
     --test1-pill-out-dur: 1.25s;
   }
@@ -13562,6 +13553,15 @@
     pointer-events: none;
   }
 
+  #canvas[data-test-scope="test1"][data-test1-pill-text-b] .test1-bottom-pill__text-a-stage,
+  #canvas[data-test-scope="test1"][data-test1-pill-text-b] .test1-bottom-pill__text-a-shiny,
+  #canvas[data-test-scope="test1"][data-test1-pill-text-b] .test1-bottom-pill__text-a-shiny-line {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    animation: none !important;
+  }
+
   #canvas[data-test-scope="test1"][data-test1-pill-text-b]:not([data-test1-pill-text-b="done"]) .test1-bottom-pill__text-b-stage {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
@@ -13769,7 +13769,7 @@
     --test1-coda-shortcut-icon: calc(var(--test1-coda-pill-h) * 30 / 59);
     --test1-coda-pill-left: calc((388px - var(--test1-coda-pill-w)) / 2 - 0.5px);
     --test1-coda-pill-top: 795px;
-    --test1-pill-bg-delay: 0.55s;
+    --test1-pill-bg-delay: 0.35s;
     --test1-pill-bg-in-dur: 0.95s;
     --test1-pill-icon-after-shell-gap: 0.22s;
     --test1-pill-pre-pink-after-icon-gap: 0.28s;
@@ -13779,25 +13779,29 @@
     --test1-pill-ai-logo-after-icon-gap: 0.12s;
     --test1-pill-ai-logo-start: calc(var(--test1-pill-bg-delay) + var(--test1-pill-bg-in-dur) + var(--test1-pill-ai-logo-after-icon-gap));
     --test1-pill-ai-logo-fade-dur: 0.48s;
-    --test1-pill-text-a-in-dur: var(--test1-pill-bg-in-dur);
+    --test1-pill-text-a-in-dur: 1.52s;
+    --test1-pill-text-a-in-ease: cubic-bezier(0.33, 0, 0.18, 1);
     --test1-pill-content-ease: cubic-bezier(0.33, 1, 0.68, 1);
     --test1-pill-text-hold: 3s;
     --test1-pill-text-a-shimmer-delay: 1s;
-    --test1-top-gradient-total: calc(var(--test1-gradient-flow-dur) + var(--test1-out-dur));
+    --test1-comp-fade-dur: 0.88s;
+    --test1-comp-fade-gap: 0.22s;
+    --test1-comp-fade-total: calc(var(--test1-comp-fade-gap) * 2 + var(--test1-comp-fade-dur));
+    --test1-comp-fade-buffer: 0.12s;
+    --test1-top-gradient-total: calc(var(--test1-gradient-third-pass-start) + var(--test1-comp-fade-total) + var(--test1-comp-fade-buffer));
     --test1-pill-pre-pink-start: calc(var(--test1-pill-icon-text-delay) + var(--test1-pill-icon-in-dur) + var(--test1-pill-pre-pink-after-icon-gap));
-    --test1-pill-text-a-reveal-start: calc(var(--test1-pill-pre-pink-start) + var(--test1-top-gradient-total));
-    --test1-pill-text-a-shimmer-start: calc(var(--test1-pill-text-a-reveal-start) + var(--test1-pill-text-a-in-dur) + var(--test1-pill-text-a-shimmer-delay));
+    --test1-pill-text-a-reveal-start: var(--test1-pill-pre-pink-start);
+    --test1-pill-text-a-shimmer-start: var(--test1-pill-text-a-reveal-start);
     --test1-pill-text-a-shiny-speed: 2s;
     --test1-pill-text-a-shimmer-dur: 3.85s;
     --test1-pill-text-sweep-dur: calc(var(--test1-pass-dur) + var(--test1-pass-step) * 2);
     --test1-pill-text-ease: cubic-bezier(0.22, 1, 0.36, 1);
     --test1-pill-text-a-out-dur: 1.15s;
     --test1-pill-text-a-out-ease: cubic-bezier(0.4, 0, 0.15, 1);
-    --test1-pill-crossfade-lead: 0.35s;
     --test1-pill-pink-fade-dur: 1.05s;
     --test1-pill-pink-fade-ease: cubic-bezier(0.33, 0, 0.18, 1);
     --test1-pill-pink-sweep-start: calc(var(--test1-pill-text-a-shimmer-start) + var(--test1-pill-text-a-shimmer-dur));
-    --test1-pill-text-fadeout-delay: calc(var(--test1-pill-pink-sweep-start) - var(--test1-pill-crossfade-lead));
+    --test1-pill-text-fadeout-delay: calc(var(--test1-pill-pink-sweep-start) - var(--test1-pill-text-a-out-dur));
     --test1-pill-pink-flow-delay: var(--test1-pill-pink-sweep-start);
     --test1-pill-grad-pass-overlap: 0.62s;
     --test1-pill-grad-pass-step: calc(var(--test1-pass-dur) - var(--test1-pill-grad-pass-overlap));
@@ -13806,10 +13810,10 @@
     --test1-pill-pre-pink-flow-dur: var(--test1-top-gradient-total);
     --test1-pill-pre-pink-sweep-end: calc(var(--test1-pill-pre-pink-start) + var(--test1-pill-pre-pink-flow-dur));
     --test1-pill-pink-sweep-end: calc(var(--test1-pill-pink-sweep-start) + var(--test1-pill-pink-flow-dur));
-    --test1-pill-text-b-lead: 0.85s;
+    --test1-pill-text-b-gap-after-pink: 0.08s;
     --test1-pill-cover-hold-dur: calc(var(--test1-pill-pink-flow-delay) - var(--test1-pill-bg-delay));
     --test1-pill-text-b-dur: 1.4s;
-    --test1-pill-text-b-delay: calc(var(--test1-pill-pink-sweep-end) - var(--test1-pill-text-b-lead));
+    --test1-pill-text-b-delay: calc(var(--test1-pill-pink-sweep-end) + var(--test1-pill-text-b-gap-after-pink));
   }
 
   /* coda — shortcut inner shell matches pillar height (57px) */
@@ -13978,6 +13982,12 @@
 
   #canvas[data-test-scope="test1"] .test1-bottom-pill__ai-logo[data-test1-ai-logo-paused] {
     animation: none !important;
+    opacity: 1 !important;
+  }
+
+  #canvas[data-test-scope="test1"][data-test1-pill-text-b] .test1-bottom-pill__ai-logo {
+    opacity: 1 !important;
+    animation: none !important;
   }
 
   #canvas[data-test-scope="test1"][data-test1-coda-run] .test1-bottom-pill__ai-logo {
@@ -14013,7 +14023,7 @@
     visibility: visible;
     clip-path: inset(0 100% 0 0);
     will-change: opacity, clip-path;
-    animation: test1PillTextAReveal var(--test1-pill-text-a-in-dur) var(--test1-pill-content-ease) var(--test1-pill-text-a-reveal-start) forwards,
+    animation: test1PillTextAReveal var(--test1-pill-text-a-in-dur) var(--test1-pill-text-a-in-ease) var(--test1-pill-text-a-reveal-start) forwards,
       test1PillTextAOut var(--test1-pill-text-a-out-dur) var(--test1-pill-text-a-out-ease) var(--test1-pill-text-fadeout-delay) forwards;
   }
 
@@ -14192,6 +14202,26 @@
     0% {
       opacity: 0;
       clip-path: inset(0 100% 0 0);
+    }
+    10% {
+      opacity: 0.06;
+      clip-path: inset(0 90% 0 0);
+    }
+    28% {
+      opacity: 0.22;
+      clip-path: inset(0 72% 0 0);
+    }
+    48% {
+      opacity: 0.48;
+      clip-path: inset(0 52% 0 0);
+    }
+    68% {
+      opacity: 0.72;
+      clip-path: inset(0 32% 0 0);
+    }
+    86% {
+      opacity: 0.9;
+      clip-path: inset(0 14% 0 0);
     }
     100% {
       opacity: 1;

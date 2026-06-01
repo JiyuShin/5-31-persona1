@@ -330,18 +330,21 @@
     }
   };
 
+  Test1GalaxyAiLogo.prototype._freezeRestFrame = function () {
+    this.coastingToRest = false;
+    this.frame = REST_PLATEAU_START;
+    this.draw();
+  };
+
   Test1GalaxyAiLogo.prototype._runScaleWaapi = function () {
     var self = this;
     var canvas = this.canvas;
     var slot = canvas && canvas.closest('.test1-bottom-pill__ai-logo-slot');
 
-    this._snapToRestLoopFrame();
-    this.frame = this.frame - this._loopFrame() + REST_FRAME;
+    this._haltLoop();
     this.settling = true;
     this.settlePhase = 'waapi';
-    this._restDrawOnly = true;
-    this.draw();
-    this._restDrawOnly = false;
+    this._freezeRestFrame();
 
     if (!slot || typeof slot.animate !== 'function') {
       this._finishPause();
@@ -376,8 +379,6 @@
       self._pauseAnim = null;
       self._finishPause();
     };
-
-    this._haltLoop();
   };
 
   Test1GalaxyAiLogo.prototype._finishPause = function () {
@@ -385,7 +386,8 @@
     this.settling = false;
     this.settlePhase = '';
     this.paused = true;
-    this.frame = this.frame - this._loopFrame() + REST_FRAME;
+    this.frame = REST_PLATEAU_START;
+    this.draw();
     if (this.canvas) this.canvas.setAttribute('data-test1-ai-logo-paused', 'done');
     var slot = this.canvas && this.canvas.closest('.test1-bottom-pill__ai-logo-slot');
     if (slot) slot.style.willChange = '';
@@ -393,14 +395,8 @@
   };
 
   Test1GalaxyAiLogo.prototype.beginPauseToRest = function () {
-    if (this.paused || this.coastingToRest || this.settling) return;
-    var wait = this._framesUntilRest();
-    if (wait === 0) {
-      this._runScaleWaapi();
-      return;
-    }
-    this.coastingToRest = true;
-    this.coastUntilFrame = this.frame + wait;
+    if (this.paused || this.settling) return;
+    this._runScaleWaapi();
   };
 
   Test1GalaxyAiLogo.prototype.draw = function () {
@@ -480,19 +476,9 @@
     var self = this;
     function loop() {
       self.raf = null;
-      if (self.coastingToRest) {
-        self.frame += 1;
-        self.draw();
-        if (self.frame >= self.coastUntilFrame) {
-          self.coastingToRest = false;
-          self._runScaleWaapi();
-          return;
-        }
-      } else if (!self.paused && !self.settling) {
-        self.frame += 1;
-        self.draw();
-      }
       if (!self.paused && !self.settling) {
+        self.frame += 1;
+        self.draw();
         self.raf = global.requestAnimationFrame(loop);
       }
     }

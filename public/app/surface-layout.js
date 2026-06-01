@@ -366,7 +366,6 @@ window.composeSurfacePlan = function composeSurfacePlan(surfaceType, layout) {
         var test1RevealAll = !!(window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll);
         var test1StackGap = 16;
         var test1LotteY = test1RevealAll ? (411 + 72 + test1StackGap) : 411;
-        var test1PillY = test1LotteY + 72 + 6;
         var test1TransitScale = 1.177;
         var test1TransitVisW = Math.round(294 * test1TransitScale);
         var test1TransitVisH = Math.round(134 * test1TransitScale);
@@ -382,8 +381,6 @@ window.composeSurfacePlan = function composeSurfacePlan(surfaceType, layout) {
               _rect: { x: 21, y: 421, w: 346, h: 72 } },
             { id: 'test1-now-bar', role: 'test1-now-bar', zone: 'viewing',
               _rect: { x: 21, y: test1LotteY, w: 346, h: 72 } },
-            { id: 'test1-assist-pill', role: 'test1-assist-pill', zone: 'viewing',
-              _rect: { x: 130, y: test1PillY, w: 127, h: 36 } },
             { id: 'test1-transit-card', role: 'test1-transit-card', zone: 'viewing',
               _rect: { x: test1TransitX, y: test1TransitY, w: test1TransitVisW, h: test1TransitVisH } },
             { id: 'test1-gradient-sweep-a', role: 'test1-gradient-sweep', zone: 'viewing',
@@ -5782,7 +5779,7 @@ window.renderAtomicForRole = function renderAtomicForRole(comp, rect) {
 
     case 'test1-transit-card': {
       return '<div class="test1-transit-card">' +
-        '<img class="test1-transit-card__svg" src="/test1-transit-card.svg" alt="" draggable="false" aria-hidden="true" />' +
+        '<img class="test1-transit-card__svg" src="/test1-transit-card.svg?v=solid-green-1" alt="" draggable="false" aria-hidden="true" />' +
       '</div>';
     }
 
@@ -9217,20 +9214,15 @@ function installTest2P2TransitionBridge(canvas) {
 
 var TEST1_INTRO_DELAY_MS = 3000;
 var TEST1_LOTTE_INTRO_MS = 720;
-var TEST1_PILL_AFTER_LOTTE_MS = 1300;
-var TEST1_PILL_ANIM_MS = 3800;
-var TEST1_ASSIST_PILL_INTRO_MS = 760;
-var TEST1_GREEN_AFTER_PILL_MS = 800;
-var TEST1_SHORTCUTS_FADE_MS = 480;
-var TEST1_STACK_AFTER_GREEN_MS = 1500;
+var TEST1_GREEN_AFTER_LOTTE_MS = 1800;
+var TEST1_STACK_AFTER_GREEN_MS = 1200;
 var TEST1_STACK_INTRO_MS = 720;
-var TEST1_AFTER_STACK_MS = 3000;
-var TEST1_PILL_OUT_FADE_MS = 1250;
-var TEST1_PILL_OUT_GAP_MS = 420;
-var TEST1_PILL_BG_DELAY_MS = 550;
+var TEST1_AFTER_STACK_MS = 1500;
+var TEST1_PILL_BG_DELAY_MS = 350;
 var TEST1_PILL_BG_IN_MS = 950;
-var TEST1_PILL_TEXT_A_IN_MS = TEST1_PILL_BG_IN_MS;
+var TEST1_PILL_TEXT_A_IN_MS = 1520;
 var TEST1_PILL_TEXT_HOLD_MS = 3000;
+var TEST1_TOP_GRADIENT_VER3_ENABLED = false;
 var TEST1_PASS_DUR_MS = 1667;
 var TEST1_PASS_OVERLAP_MS = 240;
 var TEST1_PASS_STEP_MS = TEST1_PASS_DUR_MS - TEST1_PASS_OVERLAP_MS;
@@ -9246,10 +9238,9 @@ var TEST1_PILL_GRAD_PASS_OVERLAP_MS = 620;
 var TEST1_PILL_GRAD_PASS_STEP_MS = TEST1_PASS_DUR_MS - TEST1_PILL_GRAD_PASS_OVERLAP_MS;
 var TEST1_PILL_TEXT_SWEEP_MS = TEST1_PASS_DUR_MS + TEST1_PASS_STEP_MS * 2;
 var TEST1_PILL_TEXT_A_OUT_MS = 1150;
-var TEST1_PILL_CROSSFADE_LEAD_MS = 350;
 var TEST1_PILL_PINK_FLOW_MS = TEST1_PASS_DUR_MS + TEST1_PILL_GRAD_PASS_STEP_MS * 2;
 var TEST1_PILL_TEXT_B_DUR_MS = 1400;
-var TEST1_PILL_TEXT_B_LEAD_MS = 850;
+var TEST1_PILL_TEXT_B_GAP_AFTER_PINK_MS = 80;
 var TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS = 1000;
 var TEST1_PILL_ICON_AFTER_SHELL_MS = 220;
 var TEST1_PILL_PRE_PINK_AFTER_ICON_MS = 280;
@@ -9259,15 +9250,15 @@ var TEST1_PILL_AI_LOGO_START_MS = TEST1_PILL_BG_DELAY_MS + TEST1_PILL_BG_IN_MS +
 var TEST1_PILL_AI_LOGO_FADE_MS = 480;
 var TEST1_TOP_GRADIENT_TOTAL_MS = TEST1_GRADIENT_THIRD_PASS_START_MS + TEST1_GRADIENT_OUT_FADE_MS;
 var TEST1_PILL_PRE_PINK_START_MS = TEST1_PILL_ICON_TEXT_DELAY_MS + TEST1_PILL_BG_IN_MS + TEST1_PILL_PRE_PINK_AFTER_ICON_MS;
-var TEST1_PILL_TEXT_A_REVEAL_START_MS = TEST1_PILL_PRE_PINK_START_MS + TEST1_TOP_GRADIENT_TOTAL_MS;
-var TEST1_PILL_TEXT_A_SHIMMER_START_MS = TEST1_PILL_TEXT_A_REVEAL_START_MS + TEST1_PILL_TEXT_A_IN_MS + TEST1_PILL_TEXT_A_SHIMMER_DELAY_MS;
+var TEST1_PILL_TEXT_A_REVEAL_START_MS = TEST1_PILL_PRE_PINK_START_MS;
+var TEST1_PILL_TEXT_A_SHIMMER_START_MS = TEST1_PILL_TEXT_A_REVEAL_START_MS;
 var TEST1_PILL_TEXT_A_HIGHLIGHT_PASS_MS = 2850;
 var TEST1_PILL_TEXT_A_HIGHLIGHT_STEP_MS = 500;
 var TEST1_PILL_TEXT_A_HIGHLIGHT_OVERLAP_MS = TEST1_PILL_TEXT_A_HIGHLIGHT_PASS_MS - TEST1_PILL_TEXT_A_HIGHLIGHT_STEP_MS;
 var TEST1_PILL_TEXT_A_SHIMMER_DUR_MS = TEST1_PILL_TEXT_A_HIGHLIGHT_PASS_MS + TEST1_PILL_TEXT_A_HIGHLIGHT_STEP_MS * 2;
 var TEST1_PILL_PINK_FLOW_DELAY_MS = TEST1_PILL_TEXT_A_SHIMMER_START_MS + TEST1_PILL_TEXT_A_SHIMMER_DUR_MS;
 var TEST1_PILL_PINK_SWEEP_START_MS = TEST1_PILL_PINK_FLOW_DELAY_MS;
-var TEST1_PILL_TEXT_B_DELAY_MS = TEST1_PILL_PINK_FLOW_DELAY_MS + TEST1_PILL_PINK_FLOW_MS - TEST1_PILL_TEXT_B_LEAD_MS;
+var TEST1_PILL_TEXT_B_DELAY_MS = TEST1_PILL_PINK_FLOW_DELAY_MS + TEST1_PILL_PINK_FLOW_MS + TEST1_PILL_TEXT_B_GAP_AFTER_PINK_MS;
 var TEST1_PILL_AI_LOGO_PAUSE_MS = TEST1_PILL_TEXT_B_DELAY_MS;
 var TEST1_CODA_FADE_IN_MS = TEST1_PILL_TEXT_B_DELAY_MS + TEST1_PILL_TEXT_B_DUR_MS + 500;
 var TEST1_STACK_ITEM_GAP_PX = 16;
@@ -9411,7 +9402,7 @@ function _ensureTest1GalaxyAiLogoScript(done) {
   }
   window.__mlpTest1GalaxyAiLogoLoading = [done];
   var script = document.createElement('script');
-  script.src = '/app/test1-galaxy-ai-logo.js' + (dev ? ('?t=' + Date.now()) : '?v=23');
+  script.src = '/app/test1-galaxy-ai-logo.js' + (dev ? ('?t=' + Date.now()) : '?v=25');
   script.setAttribute('data-mlp-test1-galaxy-ai-logo', '1');
   script.onload = function () {
     var queue = window.__mlpTest1GalaxyAiLogoLoading || [];
@@ -9547,16 +9538,6 @@ function _runTest1ShortcutsFade() {
   /* shortcuts stay visible for full test1 flow — no mid-sequence fade-out */
 }
 
-function _runTest1PillIntro() {
-  try {
-    var c = document.getElementById('canvas');
-    if (!c || c.getAttribute('data-test-scope') !== 'test1') return;
-    if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
-    c.setAttribute('data-test1-pill-run', '1');
-    _armTest1GreenDelay(c);
-  } catch (_) {}
-}
-
 function _runTest1GreenIntro() {
   try {
     var c = document.getElementById('canvas');
@@ -9576,96 +9557,22 @@ function _runTest1StackIntro() {
     c.setAttribute('data-test1-stack-run', '1');
     c.setAttribute('data-test1-stack-animate', '1');
     if (window.__mlpTestConfig) window.__mlpTestConfig.test1StackRun = true;
-    _armTest1PillOutDelay(c);
+    _armTest1CodaAfterStack(c);
   } catch (_) {}
 }
 
-function _armTest1CodaAfterPillOut(canvas) {
+function _armTest1CodaAfterStack(canvas) {
   if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
   if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
   if (canvas.getAttribute('data-test1-coda-run')) return;
+  if (!canvas.getAttribute('data-test1-stack-run')) return;
   if (window.__mlpTest1CodaAfterStackTimer) {
     clearTimeout(window.__mlpTest1CodaAfterStackTimer);
   }
   window.__mlpTest1CodaAfterStackTimer = setTimeout(function () {
     window.__mlpTest1CodaAfterStackTimer = null;
     _runTest1CodaIntro();
-  }, TEST1_PILL_OUT_GAP_MS);
-}
-
-function _armTest1PillOutDelay(canvas) {
-  if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
-  if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
-  if (!canvas.getAttribute('data-test1-stack-run')) return;
-  if (canvas.getAttribute('data-test1-pill-out')) return;
-  if (window.__mlpTest1PillOutDelayTimer) return;
-  window.__mlpTest1PillOutDelayTimer = setTimeout(function () {
-    window.__mlpTest1PillOutDelayTimer = null;
-    _runTest1PillOut();
   }, TEST1_AFTER_STACK_MS);
-}
-
-function _finishTest1PillOutAnimate(canvas, wrap) {
-  if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
-  canvas.removeAttribute('data-test1-pill-out-animate');
-  canvas.setAttribute('data-test1-pill-out-done', '1');
-  if (wrap) {
-    wrap.style.opacity = '0';
-  }
-  if (window.__mlpTest1PillOutAnim) {
-    try { window.__mlpTest1PillOutAnim.cancel(); } catch (_) {}
-    window.__mlpTest1PillOutAnim = null;
-  }
-  if (window.__mlpTest1PillOutEndTimer) {
-    clearTimeout(window.__mlpTest1PillOutEndTimer);
-    window.__mlpTest1PillOutEndTimer = null;
-  }
-  _armTest1CodaAfterPillOut(canvas);
-}
-
-function _runTest1PillOut() {
-  try {
-    var c = document.getElementById('canvas');
-    if (!c || c.getAttribute('data-test-scope') !== 'test1') return;
-    if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
-    if (c.getAttribute('data-test1-pill-out')) return;
-    var wrap = c.querySelector('#test1-assist-pill .test1-assist-pill-wrap');
-    var pillItem = c.querySelector('#test1-assist-pill');
-    if (pillItem && c.getAttribute('data-test1-stack-run')) {
-      pillItem.style.transform = 'translate3d(0, 88px, 0)';
-    }
-    c.setAttribute('data-test1-pill-out', '1');
-    c.setAttribute('data-test1-pill-out-animate', '1');
-    if (window.__mlpTestConfig) window.__mlpTestConfig.test1PillOut = true;
-    if (window.__mlpTest1PillOutAnim) {
-      try { window.__mlpTest1PillOutAnim.cancel(); } catch (_) {}
-      window.__mlpTest1PillOutAnim = null;
-    }
-    if (window.__mlpTest1PillOutEndTimer) clearTimeout(window.__mlpTest1PillOutEndTimer);
-    if (wrap && typeof wrap.animate === 'function') {
-      wrap.style.opacity = '1';
-      window.__mlpTest1PillOutAnim = wrap.animate(
-        [{ opacity: 1 }, { opacity: 0 }],
-        {
-          duration: TEST1_PILL_OUT_FADE_MS,
-          easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
-          fill: 'forwards'
-        }
-      );
-      window.__mlpTest1PillOutAnim.onfinish = function () {
-        _finishTest1PillOutAnimate(c, wrap);
-      };
-    }
-    window.__mlpTest1PillOutEndTimer = setTimeout(function () {
-      window.__mlpTest1PillOutEndTimer = null;
-      try {
-        var pillCanvas = document.getElementById('canvas');
-        if (!pillCanvas || pillCanvas.getAttribute('data-test-scope') !== 'test1') return;
-        var doneWrap = pillCanvas.querySelector('#test1-assist-pill .test1-assist-pill-wrap');
-        _finishTest1PillOutAnimate(pillCanvas, doneWrap);
-      } catch (_) {}
-    }, TEST1_PILL_OUT_FADE_MS + 120);
-  } catch (_) {}
 }
 
 function _finishTest1GradientOut(canvas) {
@@ -9746,6 +9653,7 @@ function _beginTest1GradientOutAnimate(canvas) {
 }
 
 function _armTest1TopGradientSync(canvas) {
+  if (!TEST1_TOP_GRADIENT_VER3_ENABLED) return;
   if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
   if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
   if (window.__mlpTest1GradientSyncTimer) {
@@ -9758,6 +9666,7 @@ function _armTest1TopGradientSync(canvas) {
 }
 
 function _runTest1GradientSweep() {
+  if (!TEST1_TOP_GRADIENT_VER3_ENABLED) return;
   try {
     var c = document.getElementById('canvas');
     if (!c || c.getAttribute('data-test-scope') !== 'test1') return;
@@ -9835,27 +9744,16 @@ function _armTest1StackDelay(canvas) {
   }, TEST1_STACK_AFTER_GREEN_MS);
 }
 
-function _armTest1GreenDelay(canvas) {
+function _armTest1GreenAfterLotte(canvas) {
   if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
   if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
-  if (!canvas.getAttribute('data-test1-pill-run')) return;
-  var greenDelay = TEST1_ASSIST_PILL_INTRO_MS + TEST1_GREEN_AFTER_PILL_MS;
-  if (!canvas.getAttribute('data-test1-green-run') && !window.__mlpTest1GreenTimer) {
-    window.__mlpTest1GreenTimer = setTimeout(function () {
-      window.__mlpTest1GreenTimer = null;
-      _runTest1GreenIntro();
-    }, greenDelay);
-  }
-}
-
-function _armTest1PillDelay(canvas) {
-  if (!canvas || canvas.getAttribute('data-test-scope') !== 'test1') return;
-  if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
-  if (window.__mlpTest1PillTimer) return;
-  window.__mlpTest1PillTimer = setTimeout(function () {
-    window.__mlpTest1PillTimer = null;
-    _runTest1PillIntro();
-  }, TEST1_LOTTE_INTRO_MS + TEST1_PILL_AFTER_LOTTE_MS);
+  if (!canvas.getAttribute('data-test1-intro-run')) return;
+  if (canvas.getAttribute('data-test1-green-run')) return;
+  if (window.__mlpTest1GreenTimer) return;
+  window.__mlpTest1GreenTimer = setTimeout(function () {
+    window.__mlpTest1GreenTimer = null;
+    _runTest1GreenIntro();
+  }, TEST1_GREEN_AFTER_LOTTE_MS);
 }
 
 function _armTest1IntroDelay(canvas) {
@@ -9869,7 +9767,7 @@ function _armTest1IntroDelay(canvas) {
       if (!c || c.getAttribute('data-test-scope') !== 'test1') return;
       if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) return;
       c.setAttribute('data-test1-intro-run', '1');
-      _armTest1PillDelay(c);
+      _armTest1GreenAfterLotte(c);
     } catch (_) {}
   }, TEST1_INTRO_DELAY_MS);
 }
@@ -10097,16 +9995,6 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
   window.renderSurfacePlan(canvas, plan, layout);
   if (testScope === 'test1') {
     try {
-      var pillItem = canvas.querySelector('#test1-assist-pill');
-      if (pillItem && (!pillItem.querySelector('.test1-assist-pill-icon--1') || !pillItem.querySelector('.test1-assist-pill-shell'))) {
-        for (var pi = 0; pi < plan.components.length; pi++) {
-          if (plan.components[pi].id === 'test1-assist-pill') {
-            var pillRect = window.resolveComponentRect(plan.components[pi], layout, plan);
-            pillItem.innerHTML = window.renderAtomicForRole(plan.components[pi], pillRect);
-            break;
-          }
-        }
-      }
       if (window.__mlpTestConfig && window.__mlpTestConfig.test1RevealAll) {
         _mountTest1BottomPillTextB(true);
       } else if (canvas.getAttribute('data-test1-pill-text-b')) {
@@ -10116,14 +10004,14 @@ window.generateSurfaceScenario = function generateSurfaceScenario(surfaceType) {
       }
       if (window.__mlpTestConfig && !window.__mlpTestConfig.test1RevealAll) {
         _armTest1IntroDelay(canvas);
-        if (canvas.getAttribute('data-test1-pill-run')) {
-          _armTest1GreenDelay(canvas);
+        if (canvas.getAttribute('data-test1-intro-run') && !canvas.getAttribute('data-test1-green-run')) {
+          _armTest1GreenAfterLotte(canvas);
         }
-        if (canvas.getAttribute('data-test1-green-run')) {
+        if (canvas.getAttribute('data-test1-green-run') && !canvas.getAttribute('data-test1-stack-run')) {
           _armTest1StackDelay(canvas);
         }
-        if (canvas.getAttribute('data-test1-stack-run')) {
-          _armTest1PillOutDelay(canvas);
+        if (canvas.getAttribute('data-test1-stack-run') && !canvas.getAttribute('data-test1-coda-run')) {
+          _armTest1CodaAfterStack(canvas);
         }
       }
     } catch (_) {}

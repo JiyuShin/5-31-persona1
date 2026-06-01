@@ -1,0 +1,80 @@
+---
+description: test1 상단 컴포넌트 gradient exit motion VER3 — restore when user asks "ver3 적용"
+globs: public/app/surface-layout.js,styles/theme-page.css,pages/test1.js
+alwaysApply: false
+---
+
+# test1 gradient exit VER3
+
+User label: **ver3** = 상단 lockscreen 컴포넌트(롯데/우리딸/green)에 **white blur gradient sweep**이 3 pass로 채워진 뒤, **3번째 pass와 동시에** 컴포넌트+paired sweep이 **순차 lift-fade**로 사라지는 motion.
+
+When the user asks to **apply / restore ver3** (or "ver3 적용"):
+
+1. Set `TEST1_TOP_GRADIENT_VER3_ENABLED = true` in `public/app/surface-layout.js`.
+2. Re-apply the current implementation **as-is** — do not redesign.
+2. test1 scope only (`#canvas[data-test-scope="test1"]`, `window.__mlpTestConfig.id === 'test1'`).
+3. Do not touch test2/test3, `/theme` preview grid, or bottom-pillar coda text timing unless explicitly requested.
+
+## VER3 behavior (reference)
+
+### In phase (gradient fill on top stack)
+- Trigger: coda `data-test1-coda-animate` → `_armTest1TopGradientSync` at `TEST1_PILL_PRE_PINK_START_MS`.
+- Sets `data-test1-gradient-run` + double rAF → `data-test1-gradient-animate`.
+- 3 overlay sweeps (`test1-gradient-sweep-a/b/c`) each run `test1GradientFillPass` on tracks 1→2→3 with per-component lag (0 / 100ms / 200ms).
+- Paired components:
+  - sweep-a ↔ `test1-now-bar-b` (top)
+  - sweep-b ↔ `test1-now-bar` (middle)
+  - sweep-c ↔ `test1-transit-card` (green)
+
+### Out phase (ver3 exit — sequential lift-fade)
+- Starts at **3rd pass** on top bar: `TEST1_GRADIENT_THIRD_PASS_START_MS` after animate begins.
+- `_beginTest1GradientOutAnimate` sets `data-test1-gradient-out-animate`.
+- **WAAPI** (not CSS mask dissolve) on inner visuals + sweep canvas-items:
+  - opacity 1→0, translateY 0→-10px
+  - duration `TEST1_GRADIENT_COMP_FADE_DUR_MS` (880ms)
+  - stagger `TEST1_GRADIENT_COMP_FADE_GAP_MS` (220ms): top → middle → green
+  - easing `cubic-bezier(0.4, 0, 0.2, 1)`
+- Finish: `_finishTest1GradientOut` → `data-test1-gradient-out`, remove animate attrs.
+
+## Key JS (`public/app/surface-layout.js`)
+
+Functions:
+- `_armTest1TopGradientSync`, `_runTest1GradientSweep`
+- `_beginTest1GradientOutAnimate`, `_runTest1GradientCompLiftFade`, `_test1GradientFadeVisual`, `_finishTest1GradientOut`
+
+Constants (ver3 reference values):
+- `TEST1_PASS_DUR_MS = 1667`, `TEST1_PASS_OVERLAP_MS = 240`
+- `TEST1_GRADIENT_COMP_STAGGER_MS = 100`
+- `TEST1_GRADIENT_COMP_FADE_DUR_MS = 880`, `TEST1_GRADIENT_COMP_FADE_GAP_MS = 220`
+- `TEST1_GRADIENT_THIRD_PASS_START_MS = PASS_STEP * 2`
+- `TEST1_GRADIENT_OUT_FADE_MS = COMP_FADE_TOTAL + 120`
+
+Component list must include sweep roles at stacked rects:
+- `test1-gradient-sweep-a/b/c` with `variant: { sweepShape: 'bar'|'card' }`
+
+## Key CSS (`styles/theme-page.css`)
+
+Block under `#canvas[data-test-scope="test1"]`:
+- Gradient sweep visibility: `data-test1-gradient-run`, `data-test1-gradient-animate`
+- `.test1-gradient-sweep__track` white blur + mask fill animation
+- `@keyframes test1GradientFillPass`
+- Out phase: freeze tracks when `data-test1-gradient-out-animate`; hide when `data-test1-gradient-out`
+- Comment anchor: `Out phase: component + paired sweep fade together via WAAPI in surface-layout.js`
+
+## Data attributes
+
+| Attribute | Meaning |
+|-----------|---------|
+| `data-test1-gradient-run` | sweep overlays visible |
+| `data-test1-gradient-animate` | 3-pass fill running |
+| `data-test1-gradient-out-animate` | ver3 sequential lift-fade active |
+| `data-test1-gradient-out` | top stack hidden / exit done |
+
+## Restore checklist
+
+- [ ] JS WAAPI exit + timing constants match ver3
+- [ ] CSS sweep fill + out-freeze rules intact
+- [ ] sweep-a/b/c in test1 composeSurfacePlan with correct `_rect`
+- [ ] `/test1` coda: gradient fill → ver3 exit on 3rd pass; `/theme` unchanged
+
+Do **not** overwrite this rule when iterating new motion versions — archive new versions separately if needed.
